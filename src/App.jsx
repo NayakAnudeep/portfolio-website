@@ -157,7 +157,7 @@ function App() {
           <div className="flex justify-center md:justify-end">
             <div className="w-80 h-96 md:w-96 md:h-[500px]">
               <img 
-                src="/src/assets/IMG_7121.PNG" 
+                src="/IMG_7121.PNG" 
                 alt="Anudeep Nayak" 
                 className="w-full h-full object-contain grayscale hover:grayscale-0 transition-all duration-500"
                 style={{
