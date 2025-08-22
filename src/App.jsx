@@ -5,44 +5,72 @@ function App() {
     {
       id: 1,
       title: "AniTA Network (AI TA)",
-      description: "Built AI Teaching Assistant web app using Django frontend, deployed on GCP with Docker containerization for scalability. Integrated Claude API (LLM) with RAG for auto-grading and stored assessment data in ArangoDB for network analysis.",
-      technologies: ["Django", "Claude API", "RAG", "ArangoDB", "GCP", "Docker"],
+      description: "Educational Network Analysis Dashboard with Django-based visualization for analyzing relationships between students, instructors, and courses. Features network theory modeling, interactive visualizations, and performance analytics with data simulation capabilities.",
+      technologies: ["Django", "NetworkX", "Python", "Data Visualization", "Network Analysis", "Educational Analytics"],
       github: "https://github.com/NayakAnudeep/network-project"
     },
     {
       id: 2,
-      title: "Dota 2 Chatbot",
-      description: "Engineered game-specific chatbot with OpenAI GPT-4 LLM and custom RAG pipeline for player query support. Achieved 95% accuracy for factual game queries and 80% for contextual questions.",
-      technologies: ["OpenAI GPT-4", "RAG", "IBM Cloud", "Python"],
-      github: "https://github.com/NayakAnudeep/AI-portfolio"
+      title: "Clearhead",
+      description: "Smart Todo app specifically designed for people with ADHD using React Native and Expo. Features Random Forest algorithm for smart categorization, priority-based task sorting, minimal distractions interface, and shows only top 3 tasks to reduce overwhelm.",
+      technologies: ["React Native", "Expo", "TypeScript", "Random Forest", "Cross-platform", "ADHD-focused Design"],
+      github: "https://github.com/NayakAnudeep/Clearhead"
     },
     {
       id: 3,
-      title: "Audio Emotion Analysis",
-      description: "This project focuses on developing a system that converts audio to text and subsequently analyzes the emotional undertones in the transcribed content.",
-      technologies: ["Jupyter Notebook", "Python", "NLP", "Audio Processing"],
-      github: "https://github.com/NayakAnudeep/audio_emotion_analysis"
+      title: "LLM-Powered Dota Chat",
+      description: "Advanced LLM-powered search system providing context-based answers for Dota 2 players. Enhanced version with improved accuracy and contextual understanding using modern language models for game-specific queries.",
+      technologies: ["Python", "LLM Integration", "Context Search", "Game Analytics", "Natural Language Processing"],
+      github: "https://github.com/NayakAnudeep/LLM-powered-dota-chat"
     },
     {
       id: 4,
-      title: "Email Resume Automation",
-      description: "Automated system to send personalized emails to recruiters and hiring managers with resume attachments, streamlining the job application process.",
-      technologies: ["Python", "Email API", "Automation"],
-      github: "https://github.com/NayakAnudeep/email_resume"
+      title: "Mail-buddy",
+      description: "AI-powered email automation system that helps craft professional emails to avoid spam filters. Features multi-AI provider support (Claude, OpenAI, Gemini), smart role detection for tech positions, and bulk processing capabilities for job applications.",
+      technologies: ["Node.js", "JavaScript", "Claude API", "OpenAI GPT", "Google Gemini", "Email APIs", "Web Interface"],
+      github: "https://github.com/NayakAnudeep/Mail-buddy"
     },
     {
       id: 5,
-      title: "Movie Guesser",
-      description: "Machine learning system to guess movies based on user preferences and recommendation algorithms using collaborative filtering techniques.",
-      technologies: ["Jupyter Notebook", "Python", "ML", "Recommendation Systems"],
-      github: "https://github.com/NayakAnudeep/movieGuesser"
+      title: "Audio Emotion Analysis",
+      description: "System that converts audio to text and analyzes emotional undertones in the transcribed content. Utilizes Speech-to-Text capabilities combined with sentiment analysis for comprehensive audio emotion detection.",
+      technologies: ["Python", "Jupyter Notebook", "NLP", "Audio Processing", "Sentiment Analysis", "Speech-to-Text"],
+      github: "https://github.com/NayakAnudeep/audio_emotion_analysis"
     },
     {
       id: 6,
+      title: "Email Resume Automation",
+      description: "Automated system to send personalized emails to recruiters and hiring managers with resume attachments, streamlining the job application process with template management and bulk sending capabilities.",
+      technologies: ["Python", "Email APIs", "Automation", "Template Management", "CSV Processing"],
+      github: "https://github.com/NayakAnudeep/email_resume"
+    },
+    {
+      id: 7,
+      title: "Movie Guesser",
+      description: "Machine learning system that predicts movies based on user preferences using collaborative filtering techniques and recommendation algorithms to provide personalized movie suggestions.",
+      technologies: ["Python", "Jupyter Notebook", "Machine Learning", "Collaborative Filtering", "Recommendation Systems", "Data Science"],
+      github: "https://github.com/NayakAnudeep/movieGuesser"
+    },
+    {
+      id: 8,
       title: "Movie Runtime vs Commercial Success",
-      description: "Data analysis project exploring the relationship between movie runtime and commercial success using statistical methods and data visualization techniques.",
-      technologies: ["Python", "Data Analysis", "Statistical Modeling", "Data Visualization"],
+      description: "Data analysis project exploring the correlation between movie runtime and commercial success using statistical methods, data visualization, and predictive modeling techniques.",
+      technologies: ["Python", "Data Analysis", "Statistical Modeling", "Data Visualization", "Pandas", "Matplotlib"],
       github: "https://github.com/NayakAnudeep/movie-runtime-vs-commercial-success"
+    },
+    {
+      id: 9,
+      title: "GRE Vocab Builder App",
+      description: "Interactive vocabulary building application designed for GRE preparation. Features spaced repetition, progress tracking, and personalized learning to help users master challenging vocabulary efficiently.",
+      technologies: ["JavaScript", "Web Development", "Local Storage", "Interactive UI", "Educational Technology"],
+      github: "https://github.com/NayakAnudeep/gre-vocab-builder-app"
+    },
+    {
+      id: 10,
+      title: "Hyprland Dotfiles",
+      description: "Custom configuration files for Hyprland window manager, featuring optimized workflows, custom keybindings, and aesthetic improvements for enhanced Linux desktop productivity.",
+      technologies: ["Shell Scripting", "Linux", "Hyprland", "Window Manager", "System Configuration", "Productivity Tools"],
+      github: "https://github.com/NayakAnudeep/hyprland-dotfiles"
     }
   ];
 
@@ -96,10 +124,11 @@ function App() {
         </div>
         <nav className="hidden md:flex space-x-6">
           <a href="#about" className="text-gray-dark hover:text-gray-light transition-colors duration-200">About</a>
+          <a href="#skills" className="text-gray-dark hover:text-gray-light transition-colors duration-200">Skills</a>
           <a href="#education" className="text-gray-dark hover:text-gray-light transition-colors duration-200">Education</a>
           <a href="#work-experience" className="text-gray-dark hover:text-gray-light transition-colors duration-200">Experience</a>
-          <a href="#part-time" className="text-gray-dark hover:text-gray-light transition-colors duration-200">Part-time</a>
           <a href="#projects" className="text-gray-dark hover:text-gray-light transition-colors duration-200">Projects</a>
+          <a href="#part-time" className="text-gray-dark hover:text-gray-light transition-colors duration-200">Part-time</a>
           <a href="#certificates" className="text-gray-dark hover:text-gray-light transition-colors duration-200">Certificates</a>
           <a href="#contact" className="text-gray-dark hover:text-gray-light transition-colors duration-200">Contact</a>
         </nav>
@@ -112,45 +141,26 @@ function App() {
             <div className="space-y-6">
               <p className="text-gray-light text-xl">Hey there! I'm</p>
               <h1 className="text-5xl md:text-7xl font-bold text-gray-dark leading-tight">
-    Anudeep Nayak
+                Anudeep Nayak
               </h1>
+              <a 
+                href="/resume/anudeep_swp.pdf" 
+                download="Anudeep_Nayak_Resume.pdf"
+                className="bg-gray-dark text-off-white px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-light transition-colors duration-200 w-fit"
+              >
+                Resume
+              </a>
             </div>
             
             <div className="flex items-start space-x-4">
-              <span className="text-2xl mt-1">⭐</span>
+              <img 
+                src="/black-cat.png" 
+                alt="Black cat icon" 
+                className="w-8 h-8 mt-1 flex-shrink-0"
+              />
               <p className="text-gray-dark text-xl leading-relaxed">
                 Data Science MS candidate with software engineering experience at GE Healthcare, combining AI/ML expertise and full-stack development skills.
               </p>
-            </div>
-            
-            <div className="space-y-4">
-              <h3 className="text-2xl font-bold text-gray-dark">Hobbies & Interests</h3>
-              <div className="flex flex-wrap gap-4">
-                <div className="flex items-center space-x-2">
-                  <span className="text-xl">⚽</span>
-                  <span className="text-gray-light text-lg">Soccer</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-xl">💪</span>
-                  <span className="text-gray-light text-lg">Gym</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-xl">📚</span>
-                  <span className="text-gray-light text-lg">Novels</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-xl">🎮</span>
-                  <span className="text-gray-light text-lg">Video Games</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-xl">🥾</span>
-                  <span className="text-gray-light text-lg">Hiking</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-xl">🐧</span>
-                  <span className="text-gray-light text-lg">Linux Ricing</span>
-                </div>
-              </div>
             </div>
           </div>
           
@@ -170,49 +180,117 @@ function App() {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section className="px-6 md:px-12 lg:px-20 xl:px-32 py-28">
+      {/* Skills Section */}
+      <section id="skills" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28 bg-gray-light/10">
         <div className="text-center mb-20">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-dark mb-6">What I Bring to Your Team</h2>
+          <div className="flex items-center justify-center mb-6">
+            <img src="/cat_skills.png" alt="Skills" className="w-8 h-8 mr-3" />
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-dark">Technical Skills</h2>
+          </div>
           <p className="text-gray-light text-xl text-center">
-            A unique blend of data science expertise and software engineering skills — ready to drive data-driven solutions and scalable applications.
+            Technologies and tools I work with to build impactful solutions.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-12 md:gap-8">
-          {/* Service 1 */}
-          <div className="text-center p-8 space-y-6">
-            <div className="w-20 h-20 bg-gray-dark rounded-full mx-auto"></div>
-            <h3 className="text-2xl font-bold text-gray-dark">Data-Driven Development</h3>
-            <p className="text-gray-light text-lg leading-relaxed">
-              Full-stack applications powered by machine learning, AI integration, and data analytics for intelligent decision-making.
-            </p>
+        <div className="max-w-6xl mx-auto space-y-12">
+          {/* Languages & Database */}
+          <div>
+            <h3 className="text-2xl font-bold text-gray-dark mb-6 text-center">Languages & Database</h3>
+            <div className="flex flex-wrap justify-center gap-4">
+              <span className="bg-blue-100 text-blue-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-blue-200 transition-colors duration-200">
+                Python
+              </span>
+              <span className="bg-orange-100 text-orange-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-orange-200 transition-colors duration-200">
+                Java
+              </span>
+              <span className="bg-yellow-100 text-yellow-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-yellow-200 transition-colors duration-200">
+                Javascript
+              </span>
+              <span className="bg-blue-100 text-blue-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-blue-200 transition-colors duration-200">
+                Typescript
+              </span>
+              <span className="bg-indigo-100 text-indigo-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-indigo-200 transition-colors duration-200">
+                SQL
+              </span>
+              <span className="bg-orange-100 text-orange-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-orange-200 transition-colors duration-200">
+                MySQL
+              </span>
+              <span className="bg-cyan-100 text-cyan-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-cyan-200 transition-colors duration-200">
+                React
+              </span>
+              <span className="bg-purple-100 text-purple-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-purple-200 transition-colors duration-200">
+                ArangoDB
+              </span>
+              <span className="bg-pink-100 text-pink-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-pink-200 transition-colors duration-200">
+                AQL
+              </span>
+              <span className="bg-green-100 text-green-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-green-200 transition-colors duration-200">
+                R
+              </span>
+              <span className="bg-red-100 text-red-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-red-200 transition-colors duration-200">
+                HTML
+              </span>
+              <span className="bg-blue-100 text-blue-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-blue-200 transition-colors duration-200">
+                CSS
+              </span>
+              <span className="bg-red-100 text-red-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-red-200 transition-colors duration-200">
+                Redis
+              </span>
+            </div>
           </div>
 
-          {/* Service 2 */}
-          <div className="text-center p-8 space-y-6">
-            <div className="w-20 h-20 bg-gray-dark rounded-full mx-auto flex items-center justify-center"></div>
-            <h3 className="text-2xl font-bold text-gray-dark">ML & AI Solutions</h3>
-            <p className="text-gray-light text-lg leading-relaxed">
-              Custom machine learning models, LLM integration, and automated data pipelines to extract insights from complex datasets.
-            </p>
-          </div>
-
-          {/* Service 3 */}
-          <div className="text-center p-8 space-y-6">
-            <div className="w-20 h-20 bg-gray-dark rounded-full mx-auto"></div>
-            <h3 className="text-2xl font-bold text-gray-dark">Scalable Systems Architecture</h3>
-            <p className="text-gray-light text-lg leading-relaxed">
-              Cloud-native applications with microservices, APIs, and database optimization for high-performance data processing.
-            </p>
+          {/* Tools & Technology */}
+          <div>
+            <h3 className="text-2xl font-bold text-gray-dark mb-6 text-center">Tools & Technology</h3>
+            <div className="flex flex-wrap justify-center gap-4">
+              <span className="bg-slate-100 text-slate-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-slate-200 transition-colors duration-200">
+                Git
+              </span>
+              <span className="bg-gray-100 text-gray-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-gray-200 transition-colors duration-200">
+                Github
+              </span>
+              <span className="bg-emerald-100 text-emerald-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-emerald-200 transition-colors duration-200">
+                Agile
+              </span>
+              <span className="bg-teal-100 text-teal-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-teal-200 transition-colors duration-200">
+                CI/CD
+              </span>
+              <span className="bg-amber-100 text-amber-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-amber-200 transition-colors duration-200">
+                Jenkins
+              </span>
+              <span className="bg-lime-100 text-lime-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-lime-200 transition-colors duration-200">
+                REST APIs
+              </span>
+              <span className="bg-orange-100 text-orange-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-orange-200 transition-colors duration-200">
+                AWS
+              </span>
+              <span className="bg-blue-100 text-blue-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-blue-200 transition-colors duration-200">
+                Azure Cloud
+              </span>
+              <span className="bg-blue-100 text-blue-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-blue-200 transition-colors duration-200">
+                IBM Cloud
+              </span>
+              <span className="bg-red-100 text-red-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-red-200 transition-colors duration-200">
+                GCP
+              </span>
+              <span className="bg-cyan-100 text-cyan-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-cyan-200 transition-colors duration-200">
+                Docker
+              </span>
+              <span className="bg-purple-100 text-purple-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-purple-200 transition-colors duration-200">
+                Kafka
+              </span>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Education Section */}
-      <section id="education" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28 bg-gray-light/10">
+      <section id="education" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28">
         <div className="text-center mb-20">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-dark mb-6">Education</h2>
+          <div className="flex items-center justify-center mb-6">
+            <img src="/cat_education.png" alt="Education" className="w-8 h-8 mr-3" />
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-dark">Education</h2>
+          </div>
           <p className="text-gray-light text-xl text-center">
             My academic background in Computer Science and Data Science.
           </p>
@@ -266,9 +344,12 @@ function App() {
       </section>
 
       {/* Work Experience Section */}
-      <section id="work-experience" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28">
+      <section id="work-experience" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28 bg-gray-light/10">
         <div className="text-center mb-20">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-dark mb-6">Work Experience</h2>
+          <div className="flex items-center justify-center mb-6">
+            <img src="/cat_work_experience.png" alt="Work Experience" className="w-8 h-8 mr-3" />
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-dark">Work Experience</h2>
+          </div>
           <p className="text-gray-light text-xl text-center">
             My professional journey and the impact I've made at various organizations.
           </p>
@@ -316,11 +397,28 @@ function App() {
                   <div>
                     <h5 className="text-lg font-semibold text-gray-dark mb-3">Technologies Used:</h5>
                     <div className="flex flex-wrap gap-2">
-                      {job.technologies.map((tech, idx) => (
-                        <span key={idx} className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">
-                          {tech}
-                        </span>
-                      ))}
+                      {job.technologies.map((tech, idx) => {
+                        const colorClasses = [
+                          "bg-blue-100 text-blue-800",
+                          "bg-orange-100 text-orange-800", 
+                          "bg-yellow-100 text-yellow-800",
+                          "bg-indigo-100 text-indigo-800",
+                          "bg-cyan-100 text-cyan-800",
+                          "bg-purple-100 text-purple-800",
+                          "bg-pink-100 text-pink-800",
+                          "bg-green-100 text-green-800",
+                          "bg-red-100 text-red-800",
+                          "bg-slate-100 text-slate-800",
+                          "bg-emerald-100 text-emerald-800",
+                          "bg-teal-100 text-teal-800"
+                        ];
+                        const colorClass = colorClasses[idx % colorClasses.length];
+                        return (
+                          <span key={idx} className={`${colorClass} px-3 py-1 rounded-full text-sm font-medium hover:opacity-80 transition-opacity duration-200`}>
+                            {tech}
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -330,10 +428,108 @@ function App() {
         </div>
       </section>
 
+
+      {/* Projects Section */}
+      <section id="projects" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28">
+        <div>
+          <div className="text-center mb-20">
+            <div className="flex items-center justify-center mb-6">
+              <img src="/cat_projects.png" alt="Projects" className="w-8 h-8 mr-3" />
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-dark">Featured Projects</h2>
+            </div>
+            <p className="text-gray-light text-xl text-center leading-relaxed">
+              Here are some of my recent works that showcase my skills and experience.
+            </p>
+          </div>
+
+          <div className="relative">
+            {/* Navigation Arrows */}
+            <button 
+              onClick={prevProject}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-gray-dark text-off-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-gray-light transition-colors duration-200 shadow-lg"
+            >
+              ←
+            </button>
+            <button 
+              onClick={nextProject}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-gray-dark text-off-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-gray-light transition-colors duration-200 shadow-lg"
+            >
+              →
+            </button>
+
+            {/* Projects Container */}
+            <div className="overflow-hidden mx-16">
+              <div 
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+              >
+                {projects.map((project) => (
+                  <div key={project.id} className="w-full flex-shrink-0 px-4">
+                    <div className="bg-off-white rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 max-w-2xl mx-auto">
+                      <div className="p-10 space-y-6">
+                        <h3 className="text-3xl font-bold text-gray-dark">{project.title}</h3>
+                        <p className="text-gray-light text-lg leading-relaxed">
+                          {project.description}
+                        </p>
+                        <div className="flex flex-wrap gap-3">
+                          {project.technologies.map((tech, index) => {
+                            const colorClasses = [
+                              "bg-blue-100 text-blue-800",
+                              "bg-orange-100 text-orange-800", 
+                              "bg-yellow-100 text-yellow-800",
+                              "bg-indigo-100 text-indigo-800",
+                              "bg-cyan-100 text-cyan-800",
+                              "bg-purple-100 text-purple-800",
+                              "bg-pink-100 text-pink-800",
+                              "bg-green-100 text-green-800",
+                              "bg-red-100 text-red-800",
+                              "bg-slate-100 text-slate-800",
+                              "bg-emerald-100 text-emerald-800",
+                              "bg-teal-100 text-teal-800"
+                            ];
+                            const colorClass = colorClasses[index % colorClasses.length];
+                            return (
+                              <span key={index} className={`${colorClass} px-4 py-2 rounded-full text-sm font-medium hover:opacity-80 transition-opacity duration-200`}>
+                                {tech}
+                              </span>
+                            );
+                          })}
+                        </div>
+                        <div className="flex gap-6 pt-4">
+                          <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-gray-dark hover:text-gray-light transition-colors duration-200 font-medium">GitHub →</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Dots Indicator */}
+            <div className="flex justify-center mt-8 space-x-2">
+              {projects.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  className={`w-3 h-3 rounded-full transition-colors duration-200 ${
+                    index === currentIndex ? 'bg-gray-dark' : 'bg-gray-light/40'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      
+
       {/* Part-time Roles Section */}
       <section id="part-time" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28 bg-gray-light/10">
         <div className="text-center mb-20">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-dark mb-6">Part-time Roles</h2>
+          <div className="flex items-center justify-center mb-6">
+            <img src="/cat_part_time.png" alt="Part-time" className="w-8 h-8 mr-3" />
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-dark">Part-time Roles</h2>
+          </div>
           <p className="text-gray-light text-xl text-center">
             Additional work experience during my graduate studies at University of Colorado Boulder.
           </p>
@@ -472,82 +668,13 @@ function App() {
         </div>
       </section>
 
-      {/* Projects Section */}
-      <section id="projects" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28 bg-gray-light/10">
-        <div>
-          <div className="text-center mb-20">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-dark mb-6">Featured Projects</h2>
-            <p className="text-gray-light text-xl text-center leading-relaxed">
-              Here are some of my recent works that showcase my skills and experience.
-            </p>
-          </div>
-
-          <div className="relative">
-            {/* Navigation Arrows */}
-            <button 
-              onClick={prevProject}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-gray-dark text-off-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-gray-light transition-colors duration-200 shadow-lg"
-            >
-              ←
-            </button>
-            <button 
-              onClick={nextProject}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-gray-dark text-off-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-gray-light transition-colors duration-200 shadow-lg"
-            >
-              →
-            </button>
-
-            {/* Projects Container */}
-            <div className="overflow-hidden mx-16">
-              <div 
-                className="flex transition-transform duration-500 ease-in-out"
-                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-              >
-                {projects.map((project) => (
-                  <div key={project.id} className="w-full flex-shrink-0 px-4">
-                    <div className="bg-off-white rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 max-w-2xl mx-auto">
-                      <div className="p-10 space-y-6">
-                        <h3 className="text-3xl font-bold text-gray-dark">{project.title}</h3>
-                        <p className="text-gray-light text-lg leading-relaxed">
-                          {project.description}
-                        </p>
-                        <div className="flex flex-wrap gap-3">
-                          {project.technologies.map((tech, index) => (
-                            <span key={index} className="bg-gray-light/20 text-gray-dark px-4 py-2 rounded-full text-sm font-medium">
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                        <div className="flex gap-6 pt-4">
-                          <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-gray-dark hover:text-gray-light transition-colors duration-200 font-medium">GitHub →</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Dots Indicator */}
-            <div className="flex justify-center mt-8 space-x-2">
-              {projects.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`w-3 h-3 rounded-full transition-colors duration-200 ${
-                    index === currentIndex ? 'bg-gray-dark' : 'bg-gray-light/40'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Certificates & Awards Section */}
       <section id="certificates" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28">
         <div className="text-center mb-20">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-dark mb-6">Certificates & Awards</h2>
+          <div className="flex items-center justify-center mb-6">
+            <img src="/cat_certificates.png" alt="Certificates" className="w-8 h-8 mr-3" />
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-dark">Certificates & Awards</h2>
+          </div>
           <p className="text-gray-light text-xl text-center">
             Professional certifications and recognition of achievements.
           </p>
@@ -560,8 +687,8 @@ function App() {
             <div className="grid md:grid-cols-2 gap-4">
               <div className="bg-off-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-dark rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-off-white text-sm">🏢</span>
+                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <img src="/ibm.png" alt="IBM" className="w-6 h-6" />
                   </div>
                   <div>
                     <h4 className="text-base font-bold text-gray-dark">Enterprise Design Thinking – Practitioner</h4>
@@ -572,8 +699,8 @@ function App() {
 
               <div className="bg-off-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-dark rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-off-white text-sm">🤖</span>
+                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <img src="/ibm.png" alt="IBM" className="w-6 h-6" />
                   </div>
                   <div>
                     <h4 className="text-base font-bold text-gray-dark">Team Essentials for AI</h4>
@@ -584,8 +711,8 @@ function App() {
 
               <div className="bg-off-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-dark rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-off-white text-sm">📊</span>
+                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <img src="/CU-Boulder-Symbol.png" alt="University of Colorado Boulder" className="w-6 h-6" />
                   </div>
                   <div>
                     <h4 className="text-base font-bold text-gray-dark">Expressway to Data Science: R Programming and Tidyverse Specialization</h4>
@@ -596,8 +723,8 @@ function App() {
 
               <div className="bg-off-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-dark rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-off-white text-sm">🐍</span>
+                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <img src="/michigan.png" alt="University of Michigan" className="w-6 h-6" />
                   </div>
                   <div>
                     <h4 className="text-base font-bold text-gray-dark">Programming for Everybody (Getting Started with Python)</h4>
@@ -608,8 +735,8 @@ function App() {
 
               <div className="bg-off-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-dark rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-off-white text-sm">📈</span>
+                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <img src="/CU-Boulder-Symbol.png" alt="University of Colorado Boulder" className="w-6 h-6" />
                   </div>
                   <div>
                     <h4 className="text-base font-bold text-gray-dark">Data Analysis with Tidyverse</h4>
@@ -620,8 +747,8 @@ function App() {
 
               <div className="bg-off-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-dark rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-off-white text-sm">📚</span>
+                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <img src="/google.png" alt="Google" className="w-6 h-6" />
                   </div>
                   <div>
                     <h4 className="text-base font-bold text-gray-dark">Foundations: Data, Data, Everywhere</h4>
@@ -632,8 +759,8 @@ function App() {
 
               <div className="bg-off-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-dark rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-off-white text-sm">🔧</span>
+                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <img src="/CU-Boulder-Symbol.png" alt="University of Colorado Boulder" className="w-6 h-6" />
                   </div>
                   <div>
                     <h4 className="text-base font-bold text-gray-dark">Introduction to R Programming and Tidyverse</h4>
@@ -644,8 +771,8 @@ function App() {
 
               <div className="bg-off-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-dark rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-off-white text-sm">🎯</span>
+                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <img src="/CU-Boulder-Symbol.png" alt="University of Colorado Boulder" className="w-6 h-6" />
                   </div>
                   <div>
                     <h4 className="text-base font-bold text-gray-dark">R Programming and Tidyverse Capstone Project</h4>
@@ -662,8 +789,8 @@ function App() {
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-off-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-gray-dark rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-off-white text-lg">🏆</span>
+                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <img src="/awards.png" alt="Award" className="w-6 h-6" />
                   </div>
                   <div>
                     <h4 className="text-lg font-bold text-gray-dark">GE Renewables DT Hackathon - First Prize</h4>
@@ -675,8 +802,8 @@ function App() {
 
               <div className="bg-off-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-gray-dark rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-off-white text-lg">🎓</span>
+                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <img src="/CU-Boulder-Symbol.png" alt="University" className="w-6 h-6" />
                   </div>
                   <div>
                     <h4 className="text-lg font-bold text-gray-dark">High Academic Performance</h4>
@@ -693,7 +820,10 @@ function App() {
       {/* Referral Section */}
       <section id="referrals" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28">
         <div className="text-center mb-20">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-dark mb-6">Professional References</h2>
+          <div className="flex items-center justify-center mb-6">
+            <img src="/cat_reference.png" alt="References" className="w-8 h-8 mr-3" />
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-dark">Professional References</h2>
+          </div>
           <p className="text-gray-light text-xl text-center">
             Contact these professionals to learn more about my work, skills, and contributions.
           </p>
@@ -704,8 +834,8 @@ function App() {
             
             {/* Reference 1 - Manager Placeholder */}
             <div className="bg-off-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 text-center">
-              <div className="w-16 h-16 bg-gray-dark rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-off-white text-2xl">👤</span>
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <img src="/user.png" alt="User" className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-bold text-gray-dark mb-2">Raghav Vanmali</h3>
               <p className="text-gray-light font-medium mb-1">Sebuir Director Technical Product Management</p>
@@ -729,8 +859,8 @@ function App() {
 
             {/* Reference 2 - Supervisor Placeholder */}
             <div className="bg-off-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 text-center">
-              <div className="w-16 h-16 bg-gray-dark rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-off-white text-2xl">👤</span>
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <img src="/user.png" alt="User" className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-bold text-gray-dark mb-2">Sanchayan Maity</h3>
               <p className="text-gray-light font-medium mb-1">Global Analytics Leader</p>
@@ -754,8 +884,8 @@ function App() {
 
             {/* Reference 3 - Supervisor Placeholder */}
             <div className="bg-off-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 text-center">
-              <div className="w-16 h-16 bg-gray-dark rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-off-white text-2xl">👤</span>
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <img src="/user.png" alt="User" className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-bold text-gray-dark mb-2">Rojana Savoye</h3>
               <p className="text-gray-light font-medium mb-1">Front House Director</p>
@@ -787,92 +917,13 @@ function App() {
         </div>
       </section>
 
-      {/* Values Section */}
-      <section id="values" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28 bg-gray-light/10">
-        <div className="text-center mb-20">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-dark mb-6">My Core Values</h2>
-          <p className="text-gray-light text-xl text-center">
-            The principles that guide my work, relationships, and approach to life.
-          </p>
-        </div>
-
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            {/* Collaboration */}
-            <div className="bg-off-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 text-center">
-              <div className="w-16 h-16 bg-gray-dark rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-off-white text-2xl">🤝</span>
-              </div>
-              <h3 className="text-xl font-bold text-gray-dark mb-4">Collaboration</h3>
-              <p className="text-gray-light leading-relaxed">
-                I believe the best solutions emerge when diverse minds work together. Every team member brings unique perspectives that strengthen our collective output.
-              </p>
-            </div>
-
-            {/* Innovation */}
-            <div className="bg-off-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 text-center">
-              <div className="w-16 h-16 bg-gray-dark rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-off-white text-2xl">💡</span>
-              </div>
-              <h3 className="text-xl font-bold text-gray-dark mb-4">Innovation</h3>
-              <p className="text-gray-light leading-relaxed">
-                Embracing new technologies and creative problem-solving approaches. I'm always curious about better ways to build, optimize, and deliver meaningful solutions.
-              </p>
-            </div>
-
-            {/* Dedication */}
-            <div className="bg-off-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 text-center">
-              <div className="w-16 h-16 bg-gray-dark rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-off-white text-2xl">🎯</span>
-              </div>
-              <h3 className="text-xl font-bold text-gray-dark mb-4">Dedication</h3>
-              <p className="text-gray-light leading-relaxed">
-                Committed to excellence in every project. I take ownership of my work and persist through challenges to deliver quality results that exceed expectations.
-              </p>
-            </div>
-
-            {/* Openness */}
-            <div className="bg-off-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 text-center">
-              <div className="w-16 h-16 bg-gray-dark rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-off-white text-2xl">🌍</span>
-              </div>
-              <h3 className="text-xl font-bold text-gray-dark mb-4">Openness</h3>
-              <p className="text-gray-light leading-relaxed">
-                Embracing diverse perspectives, cultures, and ideas. I value inclusive environments where everyone feels heard and respected, fostering creativity and growth.
-              </p>
-            </div>
-
-            {/* Resilience */}
-            <div className="bg-off-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 text-center">
-              <div className="w-16 h-16 bg-gray-dark rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-off-white text-2xl">🏔️</span>
-              </div>
-              <h3 className="text-xl font-bold text-gray-dark mb-4">Resilience</h3>
-              <p className="text-gray-light leading-relaxed">
-                Maintaining composure and focus during challenging times. I approach setbacks as learning opportunities and stay grounded in purpose-driven work.
-              </p>
-            </div>
-
-            {/* Authenticity */}
-            <div className="bg-off-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 text-center">
-              <div className="w-16 h-16 bg-gray-dark rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-off-white text-2xl">✨</span>
-              </div>
-              <h3 className="text-xl font-bold text-gray-dark mb-4">Authenticity</h3>
-              <p className="text-gray-light leading-relaxed">
-                Being genuine in all interactions and staying true to my principles. I build trust through transparency, honest communication, and consistent actions.
-              </p>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
       {/* Contact Section */}
       <section id="contact" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28 bg-gray-dark">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-off-white mb-6">Let's Work Together</h2>
+          <div className="flex items-center justify-center mb-6">
+            <img src="/cat_contact.png" alt="Contact" className="w-8 h-8 mr-3" />
+            <h2 className="text-3xl md:text-4xl font-bold text-off-white">Let's Work Together</h2>
+          </div>
           <p className="text-gray-light text-xl mb-6">
             I'm actively seeking full-time opportunities to contribute to innovative teams and impactful projects.
           </p>
@@ -887,19 +938,19 @@ function App() {
             <div className="space-y-8">
               <div className="flex items-center justify-center md:justify-start space-x-4">
                 <div className="w-12 h-12 bg-off-white rounded-full flex items-center justify-center">
-                  <span className="text-gray-dark text-lg">📧</span>
+                  <img src="/Mail-logomark-noborder.png" alt="Email" className="w-6 h-6" />
                 </div>
                 <div className="text-left">
                   <h3 className="text-off-white font-semibold">Email</h3>
-                  <a href="mailto:anudeep.nayak@colorado.edu" className="text-gray-light hover:text-off-white transition-colors">
-                    anudeep.nayak@colorado.edu
+                  <a href="mailto:anudeep.nayak@protonmail.com" className="text-gray-light hover:text-off-white transition-colors">
+                    anudeep.nayak@protonmail.com
                   </a>
                 </div>
               </div>
               
               <div className="flex items-center justify-center md:justify-start space-x-4">
                 <div className="w-12 h-12 bg-off-white rounded-full flex items-center justify-center">
-                  <span className="text-gray-dark text-lg">📱</span>
+                  <img src="/phone.png" alt="Phone" className="w-6 h-6" />
                 </div>
                 <div className="text-left">
                   <h3 className="text-off-white font-semibold">Phone</h3>
@@ -914,9 +965,7 @@ function App() {
             <div className="space-y-8">
               <div className="flex items-center justify-center md:justify-start space-x-4">
                 <div className="w-12 h-12 bg-off-white rounded-full flex items-center justify-center">
-                  <svg className="w-6 h-6 text-gray-dark" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                  </svg>
+                  <img src="/linkedin.png" alt="LinkedIn" className="w-6 h-6" />
                 </div>
                 <div className="text-left">
                   <h3 className="text-off-white font-semibold">LinkedIn</h3>
@@ -944,9 +993,13 @@ function App() {
           
           {/* CTA Text */}
           <div className="border-t border-gray-light/20 pt-12">
-            <p className="text-gray-light text-lg">
+            <p className="text-gray-light text-lg mb-6">
               Have an opportunity that matches my skills? Let's discuss how I can contribute to your team.
             </p>
+            <div className="text-gray-light text-xs space-y-1">
+              <p>Icons created by:</p>
+              <p><a href="https://www.flaticon.com/free-icons/black-cat" target="_blank" rel="noopener noreferrer" className="hover:text-off-white transition-colors">Yasashii std</a> • <a href="https://www.flaticon.com/authors/aomam" target="_blank" rel="noopener noreferrer" className="hover:text-off-white transition-colors">AomAm</a> • <a href="https://www.flaticon.com/authors/agustrisana" target="_blank" rel="noopener noreferrer" className="hover:text-off-white transition-colors">agustrisana</a> • <a href="https://www.flaticon.com/authors/freepik" target="_blank" rel="noopener noreferrer" className="hover:text-off-white transition-colors">Freepik</a> • <a href="https://www.flaticon.com/authors/madness" target="_blank" rel="noopener noreferrer" className="hover:text-off-white transition-colors">madness</a> • <a href="https://www.flaticon.com/authors/iconjam" target="_blank" rel="noopener noreferrer" className="hover:text-off-white transition-colors">Iconjam</a> • <a href="https://www.flaticon.com/authors/vectors-market" target="_blank" rel="noopener noreferrer" className="hover:text-off-white transition-colors">Vectors Market</a> • <a href="https://www.flaticon.com/authors/indra-maulana-yusuf" target="_blank" rel="noopener noreferrer" className="hover:text-off-white transition-colors">Indra Maulana Yusuf</a> - Flaticon</p>
+            </div>
           </div>
         </div>
       </section>
