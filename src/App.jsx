@@ -219,11 +219,20 @@ function App() {
               <span className="bg-indigo-100 text-indigo-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-indigo-200 transition-colors duration-200">
                 SQL
               </span>
+              <span className="bg-green-100 text-green-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-green-200 transition-colors duration-200">
+                Django
+              </span>
               <span className="bg-orange-100 text-orange-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-orange-200 transition-colors duration-200">
                 MySQL
               </span>
               <span className="bg-cyan-100 text-cyan-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-cyan-200 transition-colors duration-200">
                 React
+              </span>
+              <span className="bg-emerald-100 text-emerald-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-emerald-200 transition-colors duration-200">
+                Neo4j
+              </span>
+              <span className="bg-teal-100 text-teal-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-teal-200 transition-colors duration-200">
+                AuraDB
               </span>
               <span className="bg-purple-100 text-purple-800 px-6 py-3 rounded-full text-lg font-medium hover:bg-purple-200 transition-colors duration-200">
                 ArangoDB
@@ -503,7 +512,9 @@ function App() {
                           })}
                         </div>
                         <div className="flex gap-6 pt-4">
-                          <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-gray-dark hover:text-gray-light transition-colors duration-200 font-medium">GitHub →</a>
+                          <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-gray-dark hover:text-gray-light transition-colors duration-200 font-medium">
+                            {project.github.includes('github.com') ? 'GitHub →' : 'Website →'}
+                          </a>
                         </div>
                       </div>
                     </div>
