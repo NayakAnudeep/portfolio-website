@@ -4,69 +4,76 @@ function App() {
   const projects = [
     {
       id: 1,
+      title: "Journal Buddy",
+      description: "AI-powered mental health journaling platform using Django and Neo4j graph database. Features intelligent pattern recognition in journal entries, personalized insights for mood tracking, and therapeutic prompts based on user responses. Built with privacy-first architecture and deployed on Railway with Neo4j AuraDB integration.",
+      technologies: ["Django", "Neo4j", "Python", "Mental Health Tech", "Graph Database", "AI Pattern Recognition", "Railway Deployment"],
+      github: "https://journalbuddy.up.railway.app/"
+    },
+    {
+      id: 2,
       title: "AniTA Network (AI TA)",
       description: "Educational Network Analysis Dashboard with Django-based visualization for analyzing relationships between students, instructors, and courses. Features network theory modeling, interactive visualizations, and performance analytics with data simulation capabilities.",
       technologies: ["Django", "NetworkX", "Python", "Data Visualization", "Network Analysis", "Educational Analytics"],
       github: "https://github.com/NayakAnudeep/network-project"
     },
     {
-      id: 2,
+      id: 3,
       title: "Clearhead",
       description: "Smart Todo app specifically designed for people with ADHD using React Native and Expo. Features Random Forest algorithm for smart categorization, priority-based task sorting, minimal distractions interface, and shows only top 3 tasks to reduce overwhelm.",
       technologies: ["React Native", "Expo", "TypeScript", "Random Forest", "Cross-platform", "ADHD-focused Design"],
       github: "https://github.com/NayakAnudeep/Clearhead"
     },
     {
-      id: 3,
+      id: 4,
       title: "LLM-Powered Dota Chat",
       description: "Advanced LLM-powered search system providing context-based answers for Dota 2 players. Enhanced version with improved accuracy and contextual understanding using modern language models for game-specific queries.",
       technologies: ["Python", "LLM Integration", "Context Search", "Game Analytics", "Natural Language Processing"],
       github: "https://github.com/NayakAnudeep/LLM-powered-dota-chat"
     },
     {
-      id: 4,
+      id: 5,
       title: "Mail-buddy",
       description: "AI-powered email automation system that helps craft professional emails to avoid spam filters. Features multi-AI provider support (Claude, OpenAI, Gemini), smart role detection for tech positions, and bulk processing capabilities for job applications.",
       technologies: ["Node.js", "JavaScript", "Claude API", "OpenAI GPT", "Google Gemini", "Email APIs", "Web Interface"],
       github: "https://github.com/NayakAnudeep/Mail-buddy"
     },
     {
-      id: 5,
+      id: 6,
       title: "Audio Emotion Analysis",
       description: "System that converts audio to text and analyzes emotional undertones in the transcribed content. Utilizes Speech-to-Text capabilities combined with sentiment analysis for comprehensive audio emotion detection.",
       technologies: ["Python", "Jupyter Notebook", "NLP", "Audio Processing", "Sentiment Analysis", "Speech-to-Text"],
       github: "https://github.com/NayakAnudeep/audio_emotion_analysis"
     },
     {
-      id: 6,
+      id: 7,
       title: "Email Resume Automation",
       description: "Automated system to send personalized emails to recruiters and hiring managers with resume attachments, streamlining the job application process with template management and bulk sending capabilities.",
       technologies: ["Python", "Email APIs", "Automation", "Template Management", "CSV Processing"],
       github: "https://github.com/NayakAnudeep/email_resume"
     },
     {
-      id: 7,
+      id: 8,
       title: "Movie Guesser",
       description: "Machine learning system that predicts movies based on user preferences using collaborative filtering techniques and recommendation algorithms to provide personalized movie suggestions.",
       technologies: ["Python", "Jupyter Notebook", "Machine Learning", "Collaborative Filtering", "Recommendation Systems", "Data Science"],
       github: "https://github.com/NayakAnudeep/movieGuesser"
     },
     {
-      id: 8,
+      id: 9,
       title: "Movie Runtime vs Commercial Success",
       description: "Data analysis project exploring the correlation between movie runtime and commercial success using statistical methods, data visualization, and predictive modeling techniques.",
       technologies: ["Python", "Data Analysis", "Statistical Modeling", "Data Visualization", "Pandas", "Matplotlib"],
       github: "https://github.com/NayakAnudeep/movie-runtime-vs-commercial-success"
     },
     {
-      id: 9,
+      id: 10,
       title: "GRE Vocab Builder App",
       description: "Interactive vocabulary building application designed for GRE preparation. Features spaced repetition, progress tracking, and personalized learning to help users master challenging vocabulary efficiently.",
       technologies: ["JavaScript", "Web Development", "Local Storage", "Interactive UI", "Educational Technology"],
       github: "https://github.com/NayakAnudeep/gre-vocab-builder-app"
     },
     {
-      id: 10,
+      id: 11,
       title: "Hyprland Dotfiles",
       description: "Custom configuration files for Hyprland window manager, featuring optimized workflows, custom keybindings, and aesthetic improvements for enhanced Linux desktop productivity.",
       technologies: ["Shell Scripting", "Linux", "Hyprland", "Window Manager", "System Configuration", "Productivity Tools"],
