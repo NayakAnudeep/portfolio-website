@@ -6,7 +6,7 @@ function App() {
       id: 1,
       title: "Journal Buddy",
       description: "AI-powered mental health journaling platform using Django and Neo4j graph database. Features intelligent pattern recognition in journal entries, personalized insights for mood tracking, and therapeutic prompts based on user responses. Built with privacy-first architecture and deployed on Railway with Neo4j AuraDB integration.",
-      technologies: ["Django", "Neo4j", "Python", "Mental Health Tech", "Graph Database", "AI Pattern Recognition", "Railway Deployment"],
+      technologies: ["Django", "Neo4j", "Python", "Mental Health Tech", "AuraDB", "AI Pattern Recognition", "Railway Deployment"],
       github: "https://journalbuddy.up.railway.app/"
     },
     {
