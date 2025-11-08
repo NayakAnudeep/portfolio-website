@@ -84,6 +84,19 @@ function App() {
   const workExperience = [
     {
       id: 1,
+      company: "Actualize",
+      position: "Software Engineer Intern",
+      duration: "October 2025 - Present",
+      location: "Boulder, Colorado",
+      responsibilities: [
+        "Conducted comprehensive security assessments by pen testing over 255 API endpoints, identifying and documenting vulnerabilities to strengthen application security posture",
+        "Performed load testing and performance benchmarking using Schemathesis, analyzing response times and system behavior under stress to optimize API reliability",
+        "Currently implementing cache system with Redis and integrating RabbitMQ for improved message queuing and application performance"
+      ],
+      technologies: ["Redis", "RabbitMQ", "Schemathesis", "API Testing", "Security Testing", "Performance Testing"]
+    },
+    {
+      id: 2,
       company: "GE Healthcare",
       position: "Software Engineer",
       duration: "July 2022 - August 2023",
@@ -97,7 +110,7 @@ function App() {
       technologies: ["Java", "Vaadin", "REST API", "SQL", "NYMI APIs"]
     },
     {
-      id: 2,
+      id: 3,
       company: "GE Renewable Energy",
       position: "Software Engineering Intern",
       duration: "January 2022 - June 2022",
@@ -150,12 +163,12 @@ function App() {
               <h1 className="text-5xl md:text-7xl font-bold text-gray-dark leading-tight">
                 Anudeep Nayak
               </h1>
-              <a 
-                href="/resume/anudeep_swp.pdf" 
+              <a
+                href="/resume/anudeep_swp.pdf"
                 download="Anudeep_Nayak_Resume.pdf"
                 className="bg-gray-dark text-off-white px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-light transition-colors duration-200 w-fit"
               >
-                Resume
+                Résumé
               </a>
             </div>
             
@@ -173,9 +186,9 @@ function App() {
           
           <div className="flex justify-center md:justify-end">
             <div className="w-80 h-96 md:w-96 md:h-[500px]">
-              <img 
-                src="/IMG_7121.PNG" 
-                alt="Anudeep Nayak" 
+              <img
+                src="/IMG_7121.PNG"
+                alt="Anudeep Nayak"
                 className="w-full h-full object-contain grayscale hover:grayscale-0 transition-all duration-500"
                 style={{
                   maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 80%, rgba(0,0,0,0) 100%)',
@@ -188,7 +201,7 @@ function App() {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28 bg-gray-light/10">
+      <section id="skills" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28">
         <div className="text-center mb-20">
           <div className="flex items-center justify-center mb-6">
             <img src="/cat_skills.png" alt="Skills" className="w-8 h-8 mr-3" />
@@ -360,7 +373,7 @@ function App() {
       </section>
 
       {/* Work Experience Section */}
-      <section id="work-experience" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28 bg-gray-light/10">
+      <section id="work-experience" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28">
         <div className="text-center mb-20">
           <div className="flex items-center justify-center mb-6">
             <img src="/cat_work_experience.png" alt="Work Experience" className="w-8 h-8 mr-3" />
@@ -542,7 +555,7 @@ function App() {
       
 
       {/* Part-time Roles Section */}
-      <section id="part-time" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28 bg-gray-light/10">
+      <section id="part-time" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28">
         <div className="text-center mb-20">
           <div className="flex items-center justify-center mb-6">
             <img src="/cat_part_time.png" alt="Part-time" className="w-8 h-8 mr-3" />
@@ -730,7 +743,7 @@ function App() {
               <div className="bg-off-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <img src="/CU-Boulder-Symbol.png" alt="University of Colorado Boulder" className="w-6 h-6" />
+                    <img src="/CU-Boulder-Symbol.png" alt="University of Colorado Boulder" />
                   </div>
                   <div>
                     <h4 className="text-base font-bold text-gray-dark">Expressway to Data Science: R Programming and Tidyverse Specialization</h4>
@@ -754,7 +767,7 @@ function App() {
               <div className="bg-off-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <img src="/CU-Boulder-Symbol.png" alt="University of Colorado Boulder" className="w-6 h-6" />
+                    <img src="/CU-Boulder-Symbol.png" alt="University of Colorado Boulder" />
                   </div>
                   <div>
                     <h4 className="text-base font-bold text-gray-dark">Data Analysis with Tidyverse</h4>
@@ -778,7 +791,7 @@ function App() {
               <div className="bg-off-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <img src="/CU-Boulder-Symbol.png" alt="University of Colorado Boulder" className="w-6 h-6" />
+                    <img src="/CU-Boulder-Symbol.png" alt="University of Colorado Boulder" />
                   </div>
                   <div>
                     <h4 className="text-base font-bold text-gray-dark">Introduction to R Programming and Tidyverse</h4>
@@ -790,7 +803,7 @@ function App() {
               <div className="bg-off-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <img src="/CU-Boulder-Symbol.png" alt="University of Colorado Boulder" className="w-6 h-6" />
+                    <img src="/CU-Boulder-Symbol.png" alt="University of Colorado Boulder" />
                   </div>
                   <div>
                     <h4 className="text-base font-bold text-gray-dark">R Programming and Tidyverse Capstone Project</h4>
@@ -821,7 +834,7 @@ function App() {
               <div className="bg-off-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <img src="/CU-Boulder-Symbol.png" alt="University" className="w-6 h-6" />
+                    <img src="/CU-Boulder-Symbol.png" alt="University" />
                   </div>
                   <div>
                     <h4 className="text-lg font-bold text-gray-dark">High Academic Performance</h4>
@@ -866,12 +879,6 @@ function App() {
                     raghav.vanmali@ge.com
                   </a>
                 </div>
-                <div className="flex items-center justify-center space-x-2">
-                  <span className="text-gray-dark">📱</span>
-                  <a href="tel:+91 8197788829" className="text-gray-light hover:text-gray-dark transition-colors text-sm">
-                    +91 8197788829
-                  </a>
-                </div>
               </div>
             </div>
 
@@ -891,12 +898,6 @@ function App() {
                     sanchayanmaity@gmail.com
                   </a>
                 </div>
-                <div className="flex items-center justify-center space-x-2">
-                  <span className="text-gray-dark">📱</span>
-                  <a href="tel:+91 80959977717" className="text-gray-light hover:text-gray-dark transition-colors text-sm">
-                    +91 8095997717
-                  </a>
-                </div>
               </div>
             </div>
 
@@ -908,7 +909,7 @@ function App() {
               <h3 className="text-xl font-bold text-gray-dark mb-2">Rojana Savoye</h3>
               <p className="text-gray-light font-medium mb-1">Front House Director</p>
               <p className="text-gray-light text-sm mb-4">Macky, University of Colorado Boulder</p>
-              
+
               <div className="space-y-3">
                 <div className="flex items-center justify-center space-x-2">
                   <span className="text-gray-dark">📧</span>
@@ -916,10 +917,23 @@ function App() {
                     rojana.savoye@colorado.edu
                   </a>
                 </div>
+              </div>
+            </div>
+
+            {/* Reference 4 - Juicy */}
+            <div className="bg-off-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 text-center">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <img src="/user.png" alt="User" className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-dark mb-2">Juicy</h3>
+              <p className="text-gray-light font-medium mb-1">Founder</p>
+              <p className="text-gray-light text-sm mb-4">Actualize</p>
+
+              <div className="space-y-3">
                 <div className="flex items-center justify-center space-x-2">
-                  <span className="text-gray-dark">📱</span>
-                  <a href="tel:+1234567892" className="text-gray-light hover:text-gray-dark transition-colors text-sm">
-                    +1 (234) 567-8902
+                  <span className="text-gray-dark">📧</span>
+                  <a href="mailto:actualizeearthllc@gmail.com" className="text-gray-light hover:text-gray-dark transition-colors text-sm">
+                    actualizeearthllc@gmail.com
                   </a>
                 </div>
               </div>
