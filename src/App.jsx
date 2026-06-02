@@ -255,7 +255,7 @@ function App() {
                 Anudeep Nayak
               </motion.h1>
               <motion.a
-                href="/resume/anudeep_swp.pdf"
+                href="/resume/anudeep_nayak.pdf"
                 download="Anudeep_Nayak_Resume.pdf"
                 className="bg-gray-dark text-off-white px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-light transition-colors duration-200 w-fit inline-block"
                 initial={{ opacity: 0, y: 10 }}
