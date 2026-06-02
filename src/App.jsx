@@ -121,13 +121,6 @@ function App() {
       description: "Custom Linux desktop configuration for Qtile with themed layouts, autostart scripts, Picom compositing, Kitty terminal settings, Ranger configuration, and pywal-based visual customization.",
       technologies: ["Python", "Qtile", "Linux", "Shell Scripting", "Desktop Customization", "Dotfiles"],
       github: "https://github.com/NayakAnudeep/qtile-config"
-    },
-    {
-      id: 18,
-      title: "Synergy Engine",
-      description: "Interactive product landing prototype with a full-screen visual intro and click-to-reveal sections for explaining the AI, product outputs, differentiation, and traction narrative.",
-      technologies: ["HTML", "CSS", "JavaScript", "Interactive UI", "Landing Page", "Product Prototype"],
-      github: "https://github.com/NayakAnudeep/synergy_engine"
     }
   ];
 
