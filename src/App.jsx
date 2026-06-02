@@ -79,6 +79,55 @@ function App() {
       description: "Custom configuration files for Hyprland window manager, featuring optimized workflows, custom keybindings, and aesthetic improvements for enhanced Linux desktop productivity.",
       technologies: ["Shell Scripting", "Linux", "Hyprland", "Window Manager", "System Configuration", "Productivity Tools"],
       github: "https://github.com/NayakAnudeep/hyprland-dotfiles"
+    },
+    {
+      id: 12,
+      title: "Documentation Analytics Chatbot",
+      description: "RAG-powered analytics chatbot that reads database documentation, decides which data to fetch, and generates explanatory Plotly visualizations for natural-language customer questions.",
+      technologies: ["Python", "RAG", "Claude", "LangChain", "ChromaDB", "Plotly", "Streamlit", "FastAPI"],
+      github: "https://github.com/NayakAnudeep/doc_rag"
+    },
+    {
+      id: 13,
+      title: "Insurance Claims Agent",
+      description: "Autonomous FNOL processing app that extracts claim fields from text or PDF documents, detects missing mandatory fields, recommends routing decisions, explains its reasoning, and stores JSON outputs.",
+      technologies: ["Next.js", "React", "TypeScript", "OpenAI API", "PDF Processing", "Node.js", "Automated Routing"],
+      github: "https://github.com/NayakAnudeep/Insurance-agent"
+    },
+    {
+      id: 14,
+      title: "SpecDriven",
+      description: "Native SwiftUI macOS app for spec-driven development. Keeps product intent, requirements, acceptance criteria, implementation tasks, and decisions in a local workspace with Markdown export.",
+      technologies: ["Swift", "SwiftUI", "macOS", "JSON Storage", "Markdown Export", "Product Specs"],
+      github: "https://github.com/NayakAnudeep/latex_to_pdf"
+    },
+    {
+      id: 15,
+      title: "Resume Generator",
+      description: "AI-powered resume generator that creates multiple bullet point variants for each role, stores them in PostgreSQL, matches the most relevant experience to a job description, and supports PDF downloads.",
+      technologies: ["Node.js", "Express", "OpenAI API", "PostgreSQL", "PDF Generation", "Resume Tailoring"],
+      github: "https://github.com/NayakAnudeep/resume_generator"
+    },
+    {
+      id: 16,
+      title: "Remon",
+      description: "Rust-based Redis monitor that polls Redis INFO metrics, tracks rolling history, and lays the groundwork for a terminal dashboard showing memory, clients, uptime, and operational status.",
+      technologies: ["Rust", "Tokio", "Redis", "Ratatui", "Crossterm", "TUI"],
+      github: "https://github.com/NayakAnudeep/remon"
+    },
+    {
+      id: 17,
+      title: "Qtile Config",
+      description: "Custom Linux desktop configuration for Qtile with themed layouts, autostart scripts, Picom compositing, Kitty terminal settings, Ranger configuration, and pywal-based visual customization.",
+      technologies: ["Python", "Qtile", "Linux", "Shell Scripting", "Desktop Customization", "Dotfiles"],
+      github: "https://github.com/NayakAnudeep/qtile-config"
+    },
+    {
+      id: 18,
+      title: "Synergy Engine",
+      description: "Interactive product landing prototype with a full-screen visual intro and click-to-reveal sections for explaining the AI, product outputs, differentiation, and traction narrative.",
+      technologies: ["HTML", "CSS", "JavaScript", "Interactive UI", "Landing Page", "Product Prototype"],
+      github: "https://github.com/NayakAnudeep/synergy_engine"
     }
   ];
 
@@ -86,15 +135,17 @@ function App() {
     {
       id: 1,
       company: "Actualize",
-      position: "Software Engineer Intern",
+      position: "Software Engineer",
       duration: "October 2025 - Present",
       location: "Boulder, Colorado",
       responsibilities: [
+        "Architected Aether Chat, a context-aware AI conversational agent that processes historical user behavior and geospatial data to dynamically generate personalized, location-based event recommendations",
+        "Integrated Redis in-memory caching solution to optimize database queries and API responses, achieving up to 50% improvement in system performance metrics",
+        "Implemented RabbitMQ message queue system with graceful shutdown and startup mechanisms, reducing average processing wait times by over 500ms while ensuring zero message loss during deployments",
         "Conducted comprehensive security assessments by pen testing over 255 API endpoints, identifying and documenting vulnerabilities to strengthen application security posture",
-        "Performed load testing and performance benchmarking using Schemathesis, analyzing response times and system behavior under stress to optimize API reliability",
-        "Currently implementing cache system with Redis and integrating RabbitMQ for improved message queuing and application performance"
+        "Performed load testing and performance benchmarking using Schemathesis, analyzing response times and system behavior under stress to optimize API reliability"
       ],
-      technologies: ["Redis", "RabbitMQ", "Schemathesis", "API Testing", "Security Testing", "Performance Testing"]
+      technologies: ["Redis", "RabbitMQ", "AI", "Geospatial Data", "Schemathesis", "API Testing", "Security Testing", "Performance Testing", "Python"]
     },
     {
       id: 2,
@@ -157,9 +208,9 @@ function App() {
 
       {/* Hero Section */}
       <section id="about" className="px-6 md:px-12 lg:px-20 xl:px-32 py-24 md:py-32 pt-32 md:pt-40 relative overflow-hidden">
-        {/* Logo Overlay - centered */}
+        {/* Logo Overlay - centered to entire section */}
         <motion.div
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none hidden lg:block"
+          className="absolute left-0 right-0 top-0 bottom-0 pointer-events-none hidden lg:flex items-center justify-center"
           style={{ opacity: 0.15 }}
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 0.15, scale: 1 }}
@@ -1467,8 +1518,8 @@ function App() {
                 </div>
                 <div className="text-left">
                   <h3 className="text-off-white font-semibold">Phone</h3>
-                  <a href="tel:+13032699785" className="text-gray-light hover:text-off-white transition-colors">
-                    +1 (303) 269-9785
+                  <a href="tel:+919945830497" className="text-gray-light hover:text-off-white transition-colors">
+                    +91 9945830497
                   </a>
                 </div>
               </div>

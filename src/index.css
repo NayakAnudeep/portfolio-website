@@ -1,17 +1,48 @@
-@import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-@theme {
-  --color-gray-light: #A8A8A8;
-  --color-gray-dark: #424242;
-  --color-off-white: #FEFCFC;
-  --font-family-poppins: 'Poppins', sans-serif;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-* {
-  box-sizing: border-box;
-}
+@layer base {
+  :root {
+    /* New Color Palette */
+    --bg: #f5f1ea;
+    --bg-2: #efeae0;
+    --fg: #1a1816;
+    --muted: #6b635a;
+    --muted-2: #8b8278;
+    --hair: #e1dacb;
+    --hair-2: #d6cebd;
+    --accent: #b8502e;
+    --accent-ink: #7a3318;
 
-body {
-  font-family: var(--font-family-poppins);
+    /* Fonts */
+    --serif: 'Instrument Serif', 'Times New Roman', serif;
+    --sans: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    /* Legacy color variables for compatibility */
+    --color-gray-light: var(--muted-2);
+    --color-gray-dark: var(--fg);
+    --color-off-white: var(--bg);
+    --font-family-poppins: var(--sans);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: var(--sans);
+    background-color: var(--bg);
+    color: var(--fg);
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--bg);
+  }
 }
