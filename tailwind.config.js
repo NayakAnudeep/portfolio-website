@@ -7,9 +7,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        // New color palette
+        // Single warm-neutral family; one accent.
         'bg': '#f5f1ea',
         'bg-2': '#efeae0',
+        'surface': '#faf8f4',
         'fg': '#1a1816',
         'muted': '#6b635a',
         'muted-2': '#8b8278',
@@ -17,14 +18,8 @@ export default {
         'hair-2': '#d6cebd',
         'accent': '#b8502e',
         'accent-ink': '#7a3318',
-
-        // Legacy colors for compatibility
-        'gray-light': '#8b8278',  // mapped to muted-2
-        'gray-dark': '#1a1816',   // mapped to fg
-        'off-white': '#f5f1ea',   // mapped to bg
       },
       fontFamily: {
-        'poppins': ['Geist', 'ui-sans-serif', 'system-ui', '-apple-system', 'sans-serif'],
         'serif': ['Instrument Serif', 'Times New Roman', 'serif'],
         'sans': ['Geist', 'ui-sans-serif', 'system-ui', '-apple-system', 'sans-serif'],
         'mono': ['Geist Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],

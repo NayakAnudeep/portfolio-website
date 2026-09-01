@@ -8,41 +8,206 @@
 
 @layer base {
   :root {
-    /* New Color Palette */
+    /* Warm neutral ground — single hue family (30deg), varied only in lightness */
     --bg: #f5f1ea;
     --bg-2: #efeae0;
+    --surface: #faf8f4;
     --fg: #1a1816;
     --muted: #6b635a;
     --muted-2: #8b8278;
     --hair: #e1dacb;
     --hair-2: #d6cebd;
+
+    /* Single accent: terracotta, complementary to the sand ground.
+       Used sparingly — links, active state, one rule under the name. */
     --accent: #b8502e;
     --accent-ink: #7a3318;
+    --accent-wash: rgba(184, 80, 46, 0.10);
+    /* Same hue, lifted for legibility on the near-black contact ground. */
+    --accent-on-dark: #e08a5f;
+    /* Slightly deeper accent for 11px marker text: clears 4.5:1 on both
+       grounds, where the base accent lands at 4.4. Visually identical. */
+    --accent-text: #ad4a29;
+    /* Keyword text: a desaturated teal, roughly complementary to the
+       terracotta. Applied to type only — the chip outline stays neutral. */
+    --keyword: #2f6b62;
 
-    /* Fonts */
     --serif: 'Instrument Serif', 'Times New Roman', serif;
     --sans: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
     --mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-    /* Legacy color variables for compatibility */
-    --color-gray-light: var(--muted-2);
-    --color-gray-dark: var(--fg);
-    --color-off-white: var(--bg);
-    --font-family-poppins: var(--sans);
   }
 
   * {
     box-sizing: border-box;
   }
 
+  html {
+    scroll-behavior: smooth;
+    /* Keep anchored sections clear of the fixed header. The mobile header is
+       taller because it carries a second row of scrolling nav links. */
+    scroll-padding-top: 7.5rem;
+  }
+
+  @media (min-width: 768px) {
+    html {
+      scroll-padding-top: 6rem;
+    }
+  }
+
+  html, body {
+    /* The section markers bleed to the viewport edge; this guarantees no
+       horizontal scroll on narrow screens even if one escapes its section. */
+    overflow-x: clip;
+    max-width: 100%;
+  }
+
   body {
     font-family: var(--sans);
     background-color: var(--bg);
     color: var(--fg);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
   ::selection {
     background: var(--accent);
     color: var(--bg);
+  }
+
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  /* One shared chip. No rainbow — hierarchy comes from weight, not hue. */
+  .chip {
+    @apply inline-flex items-center rounded-full text-[13px] leading-none tracking-tight;
+    padding: 0.4rem 0.7rem;
+    color: var(--keyword);
+    background: transparent;
+    border: 1px solid var(--hair-2);
+  }
+
+  /* Solid dot instead of an em dash: the dash sat at --hair-2 and read as
+     absent. Sized to align with the cap height of the first line. */
+  .bullet-dot {
+    flex: none;
+    width: 5px;
+    height: 5px;
+    margin-top: 0.6em;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .bullet-dot-sm {
+    width: 4px;
+    height: 4px;
+  }
+
+  /* Mobile nav strip: scrolls horizontally, hides its scrollbar, and lets the
+     row bleed to the screen edge so links are not clipped mid-word. */
+  .nav-scroll {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .nav-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .rule {
+    height: 1px;
+    background: var(--hair-2);
+    border: 0;
+  }
+
+
+  /* Nested headings: outrank body copy without competing with the section
+     marker above them. No accent — that stays unique to section starts. */
+  .eyebrow-on-dark {
+    color: var(--accent-on-dark);
+  }
+
+  .eyebrow-on-dark::before {
+    background: var(--accent-on-dark);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted-2);
+  }
+
+  /* Section marker: a short accent bar, the label, then a hairline running out
+     to the right edge of the viewport. The rule IS the separator, so sections
+     divide through space and line rather than a background change. */
+  .section-marker {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    /* Escape the centered content column so the rule reaches the screen edge.
+       The parent section clips the overflow, so this cannot cause a horizontal
+       scrollbar even though 100vw includes the scrollbar gutter. */
+    margin-right: calc(50% - 50vw);
+    padding-right: 0;
+  }
+
+  .section-marker::after {
+    content: '';
+    flex: 1 1 auto;
+    height: 1px;
+    background: var(--hair-2);
+    min-width: 2rem;
+  }
+
+  .section-marker-dark::after {
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  /* The accent appears exactly once per section, on the label that announces
+     it — color carries structure instead of decoration. */
+  .eyebrow-accent {
+    color: var(--accent-text);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex: none;
+    white-space: nowrap;
+  }
+
+  .eyebrow-accent::before {
+    content: '';
+    width: 1.75rem;
+    height: 2px;
+    background: var(--accent);
+    flex: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

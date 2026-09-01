@@ -1,1579 +1,769 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 
+/* Motion presets — one shared vocabulary instead of per-element values. */
+const fadeUp = {
+  initial: { opacity: 0, y: 16 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-80px' },
+  transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+};
+
+const stagger = {
+  initial: 'hidden',
+  whileInView: 'visible',
+  viewport: { once: true, margin: '-80px' },
+  variants: { visible: { transition: { staggerChildren: 0.06 } } },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+};
+
+function Section({ id, eyebrow, title, intro, children, className = '' }) {
+  return (
+    /* Asymmetric padding: a large gap above each header, a smaller one below its
+       content, so sections read as blocks rather than an evenly-spaced stream. */
+    <section id={id} className={`px-6 md:px-12 lg:px-20 xl:px-32 pt-32 md:pt-40 pb-20 md:pb-24 overflow-hidden ${className}`}>
+      <motion.div className="max-w-5xl mx-auto mb-16" {...fadeUp}>
+        {/* Label, then a rule running to the right edge — the separator IS the
+            heading, so the accent marks structure without a background change. */}
+        <div className="section-marker mb-5">
+          <span className="eyebrow eyebrow-accent">{eyebrow}</span>
+        </div>
+        <h2 className="font-serif text-4xl md:text-5xl text-fg tracking-tight">{title}</h2>
+        {intro && <p className="text-muted text-lg mt-5 max-w-2xl leading-relaxed">{intro}</p>}
+      </motion.div>
+      <div className="max-w-5xl mx-auto">{children}</div>
+    </section>
+  );
+}
+
 function App() {
+  /* Sourced from the verified achievement corpus in resume_generator.
+     Attribution and qualifiers below are load-bearing — do not loosen them. */
   const projects = [
     {
       id: 1,
-      title: "Journal Buddy",
-      description: "AI-powered mental health journaling platform using Django and Neo4j graph database. Features intelligent pattern recognition in journal entries, personalized insights for mood tracking, and therapeutic prompts based on user responses. Built with privacy-first architecture and deployed on Railway with Neo4j AuraDB integration.",
-      technologies: ["Django", "Neo4j", "Python", "Mental Health Tech", "AuraDB", "AI Pattern Recognition", "Railway Deployment"],
-      github: "https://journalbuddy.up.railway.app/"
+      title: 'Agent B',
+      subtitle: 'Vision-driven documentation agent',
+      blurb:
+        'Multi-agent system that documents web workflows on its own. Drives a live application with Playwright, reads each screen with a vision model using Set-of-Mark prompting to mark interactive elements, and detects state transitions by combining visual similarity, DOM tracking and network monitoring. Ask it how to create a project in a tool and it explores the app and writes the guide.',
+      metrics: [],
+      tags: ['Python', 'Playwright', 'Vision LLM', 'Set-of-Mark', 'SSIM'],
+      href: 'https://github.com/NayakAnudeep/agent-b-systemn',
+      label: 'GitHub',
+      context: 'Personal · MIT',
     },
     {
       id: 2,
-      title: "AniTA Network (AI TA)",
-      description: "Educational Network Analysis Dashboard with Django-based visualization for analyzing relationships between students, instructors, and courses. Features network theory modeling, interactive visualizations, and performance analytics with data simulation capabilities.",
-      technologies: ["Django", "NetworkX", "Python", "Data Visualization", "Network Analysis", "Educational Analytics"],
-      github: "https://github.com/NayakAnudeep/network-project"
+      title: 'AniTA Network',
+      subtitle: 'AI Teaching Assistant',
+      blurb:
+        'Rebuilt an AI teaching assistant end to end after a team delivery stalled. Grades free-text answers, then uses Jaccard similarity against Louvain-detected graph clusters to route low-agreement gradings back to manual review rather than accepting them. PageRank surfaces study material from the answers a student got wrong.',
+      metrics: [
+        ['90%', 'grading accuracy vs. hand-graded key'],
+        ['240', 'responses graded by hand to validate'],
+      ],
+      tags: ['Python', 'Django', 'ArangoDB', 'Claude API', 'Graph Analytics', 'RAG'],
+      href: 'https://github.com/NayakAnudeep/network-project',
+      label: 'GitHub',
+      context: 'CU Boulder',
     },
     {
       id: 3,
-      title: "Clearhead",
-      description: "Smart Todo app specifically designed for people with ADHD using React Native and Expo. Features Random Forest algorithm for smart categorization, priority-based task sorting, minimal distractions interface, and shows only top 3 tasks to reduce overwhelm.",
-      technologies: ["React Native", "Expo", "TypeScript", "Random Forest", "Cross-platform", "ADHD-focused Design"],
-      github: "https://github.com/NayakAnudeep/Clearhead"
+      title: 'Resume Generator',
+      subtitle: 'In development',
+      blurb:
+        'A resume generator built around a deterministic verifier. Every number in generated output must match a stored fact, every technology must be tagged on that achievement, and a credit gate distinguishes what I did from what a team did from what a tool I built did. When a rewrite cannot be verified it falls back to stored wording rather than shipping a claim I cannot defend.',
+      metrics: [
+        ['<6', 'LLM calls per full run via BM25 prefilter'],
+        ['9.4k', 'lines of Python, 16 test modules'],
+      ],
+      tags: ['Python', 'SQLite', 'LaTeX', 'FastAPI', 'MCP', 'LLM APIs'],
+      href: null,
+      context: 'Personal',
     },
     {
       id: 4,
-      title: "LLM-Powered Dota Chat",
-      description: "Advanced LLM-powered search system providing context-based answers for Dota 2 players. Enhanced version with improved accuracy and contextual understanding using modern language models for game-specific queries.",
-      technologies: ["Python", "LLM Integration", "Context Search", "Game Analytics", "Natural Language Processing"],
-      github: "https://github.com/NayakAnudeep/LLM-powered-dota-chat"
+      title: 'Dota 2 LLM Chatbot',
+      subtitle: 'Domain-specific RAG',
+      blurb:
+        'Mined Wikipedia and Liquipedia, chunked and embedded the corpus with SentenceTransformers, indexed it in FAISS, and generated with GPT-4. Tested on interpretation questions requiring inference rather than direct lookup — the notable result is that no answer was factually wrong; the failure mode was misreading the question, not fabricating.',
+      metrics: [
+        ['90%', 'accuracy across 50 inference questions'],
+        ['0', 'factually incorrect answers'],
+      ],
+      tags: ['Python', 'GPT-4', 'FAISS', 'SentenceTransformers', 'RAG', 'IBM Cloud'],
+      href: 'https://github.com/NayakAnudeep/LLM-powered-dota-chat',
+      label: 'GitHub',
+      context: 'CU Boulder',
     },
     {
       id: 5,
-      title: "Mail-buddy",
-      description: "AI-powered email automation system that helps craft professional emails to avoid spam filters. Features multi-AI provider support (Claude, OpenAI, Gemini), smart role detection for tech positions, and bulk processing capabilities for job applications.",
-      technologies: ["Node.js", "JavaScript", "Claude API", "OpenAI GPT", "Google Gemini", "Email APIs", "Web Interface"],
-      github: "https://github.com/NayakAnudeep/Mail-buddy"
+      title: 'AppyJob',
+      subtitle: 'Autonomous application agent',
+      blurb:
+        'Applies to jobs end to end without supervision. A dual-agent design runs fast DOM manipulation first and falls back to Claude vision when a form defeats the selectors, with screenshot capture and logging throughout, configurable rate limits, and a Flask dashboard for live stats. I used it on my own job search.',
+      metrics: [],
+      tags: ['Python', 'Playwright', 'Claude API', 'Flask', 'Computer Vision'],
+      href: 'https://github.com/NayakAnudeep/agent-appyjob',
+      label: 'GitHub',
+      context: 'Personal',
     },
     {
       id: 6,
-      title: "Audio Emotion Analysis",
-      description: "System that converts audio to text and analyzes emotional undertones in the transcribed content. Utilizes Speech-to-Text capabilities combined with sentiment analysis for comprehensive audio emotion detection.",
-      technologies: ["Python", "Jupyter Notebook", "NLP", "Audio Processing", "Sentiment Analysis", "Speech-to-Text"],
-      github: "https://github.com/NayakAnudeep/audio_emotion_analysis"
+      title: 'Journal Buddy',
+      subtitle: 'Therapy preparation RAG',
+      blurb:
+        'Reads a rolling week of journal entries and generates therapy session prep — emotional, behavioural and cognitive patterns, progress against previous weeks, and specific questions to raise. A Neo4j knowledge graph models screening questions, categories and user profiles across four dimensions, driving personalized journaling templates from graph relationships.',
+      metrics: [
+        ['7-day', 'rolling analysis window'],
+        ['4', 'screening dimensions modeled in Neo4j'],
+      ],
+      tags: ['Django', 'Neo4j', 'GPT-4', 'RAG', 'Caching'],
+      href: null,
+      context: 'Personal · deployed then withdrawn',
     },
     {
       id: 7,
-      title: "Email Resume Automation",
-      description: "Automated system to send personalized emails to recruiters and hiring managers with resume attachments, streamlining the job application process with template management and bulk sending capabilities.",
-      technologies: ["Python", "Email APIs", "Automation", "Template Management", "CSV Processing"],
-      github: "https://github.com/NayakAnudeep/email_resume"
+      title: 'CineCipher',
+      subtitle: 'NLP content recommendation',
+      blurb:
+        'Built an NLP recommendation engine that matches films to a free-form natural-language query rather than to genre tags. Scraped 10,000+ IMDb titles with BeautifulSoup — director, cast, plot, genre — then used spaCy and Gensim for topic modeling and document similarity to rank against the query. Team of six; published final report.',
+      metrics: [['10k+', 'films scraped and indexed']],
+      tags: ['Python', 'spaCy', 'Gensim', 'BeautifulSoup', 'NLP', 'Pandas'],
+      href: 'https://github.com/NayakAnudeep/movieGuesser',
+      label: 'GitHub',
+      context: 'CU Boulder · team of 6',
     },
     {
       id: 8,
-      title: "Movie Guesser",
-      description: "Machine learning system that predicts movies based on user preferences using collaborative filtering techniques and recommendation algorithms to provide personalized movie suggestions.",
-      technologies: ["Python", "Jupyter Notebook", "Machine Learning", "Collaborative Filtering", "Recommendation Systems", "Data Science"],
-      github: "https://github.com/NayakAnudeep/movieGuesser"
+      title: 'Speech Emotion Analysis',
+      subtitle: 'Whisper + neural classification',
+      blurb:
+        'Transcribed a feature film with Whisper, split it into sentences, and classified each through a Keras neural network trained on a labeled emotions corpus — then compared those emotions against TextBlob sentiment polarity. The finding: emotion and sentiment are statistically independent, and combining adjacent sentences changed the sentiment of 455 of 1,207 entries while leaving the emotion distribution intact.',
+      metrics: [
+        ['1,207', 'sentences classified'],
+        ['455', 'sentiment shifts when merging adjacent lines'],
+      ],
+      tags: ['Python', 'Whisper', 'Keras', 'TextBlob', 'NLTK', 'scikit-learn'],
+      href: 'https://github.com/NayakAnudeep/audio_emotion_analysis',
+      label: 'GitHub',
+      context: 'CU Boulder · pair',
     },
     {
       id: 9,
-      title: "Movie Runtime vs Commercial Success",
-      description: "Data analysis project exploring the correlation between movie runtime and commercial success using statistical methods, data visualization, and predictive modeling techniques.",
-      technologies: ["Python", "Data Analysis", "Statistical Modeling", "Data Visualization", "Pandas", "Matplotlib"],
-      github: "https://github.com/NayakAnudeep/movie-runtime-vs-commercial-success"
+      title: 'Email Automation',
+      subtitle: 'Multi-provider outreach',
+      blurb:
+        'Writes and sends job referral email with selectable generation across three LLM providers and delivery across three email providers. Detects role type from the job description, caches and matches similar templates to avoid regeneration, bulk processes from CSV, and rate limits so providers do not cut you off.',
+      metrics: [
+        ['3 + 3', 'LLM and email providers supported'],
+        ['10', 'replies to referral emails sent'],
+      ],
+      tags: ['Node.js', 'Claude API', 'OpenAI', 'Gemini', 'SMTP'],
+      href: 'https://github.com/NayakAnudeep/Mail-buddy',
+      label: 'GitHub',
+      context: 'Personal',
     },
     {
       id: 10,
-      title: "GRE Vocab Builder App",
-      description: "Interactive vocabulary building application designed for GRE preparation. Features spaced repetition, progress tracking, and personalized learning to help users master challenging vocabulary efficiently.",
-      technologies: ["JavaScript", "Web Development", "Local Storage", "Interactive UI", "Educational Technology"],
-      github: "https://github.com/NayakAnudeep/gre-vocab-builder-app"
+      title: 'remon',
+      subtitle: 'Redis monitor TUI',
+      blurb:
+        'An asynchronous Redis monitoring terminal UI in Rust, built with Tokio and Ratatui while doing the Redis caching work at Actualize — live visibility into cache state from the terminal.',
+      metrics: [],
+      tags: ['Rust', 'Tokio', 'Redis', 'Ratatui'],
+      href: null,
+      context: 'Personal',
     },
     {
       id: 11,
-      title: "Hyprland Dotfiles",
-      description: "Custom configuration files for Hyprland window manager, featuring optimized workflows, custom keybindings, and aesthetic improvements for enhanced Linux desktop productivity.",
-      technologies: ["Shell Scripting", "Linux", "Hyprland", "Window Manager", "System Configuration", "Productivity Tools"],
-      github: "https://github.com/NayakAnudeep/hyprland-dotfiles"
+      title: 'BTC Research Pipeline',
+      subtitle: 'Market microstructure',
+      blurb:
+        'A causal technical-level research pipeline for Binance BTC/USDT covering ingestion, cleaning, feature generation and market microstructure analysis, with a Streamlit interface and a pytest suite over the analysis code.',
+      metrics: [],
+      tags: ['Python', 'Pandas', 'SciPy', 'Streamlit', 'Quantitative Analysis'],
+      href: null,
+      context: 'Personal',
     },
     {
       id: 12,
-      title: "Documentation Analytics Chatbot",
-      description: "RAG-powered analytics chatbot that reads database documentation, decides which data to fetch, and generates explanatory Plotly visualizations for natural-language customer questions.",
-      technologies: ["Python", "RAG", "Claude", "LangChain", "ChromaDB", "Plotly", "Streamlit", "FastAPI"],
-      github: "https://github.com/NayakAnudeep/doc_rag"
+      title: 'Resume Classifier',
+      subtitle: 'GE hackathon — first prize',
+      blurb:
+        'An ML categorization system using Scikit-learn and KNN to parse and classify resumes. Won first place by optimizing the model through custom data filtering, preprocessing and text mining.',
+      metrics: [
+        ['83%', 'classification accuracy'],
+        ['1st', 'place'],
+      ],
+      tags: ['Python', 'Scikit-learn', 'KNN', 'NLP', 'Data Mining'],
+      href: null,
+      context: 'GE Renewable Energy',
     },
     {
       id: 13,
-      title: "Insurance Claims Agent",
-      description: "Autonomous FNOL processing app that extracts claim fields from text or PDF documents, detects missing mandatory fields, recommends routing decisions, explains its reasoning, and stores JSON outputs.",
-      technologies: ["Next.js", "React", "TypeScript", "OpenAI API", "PDF Processing", "Node.js", "Automated Routing"],
-      github: "https://github.com/NayakAnudeep/Insurance-agent"
+      title: 'Clearhead',
+      subtitle: 'Todo app for ADHD',
+      blurb:
+        'A React Native task app built around ADHD constraints — it surfaces only the top few tasks at a time so the list itself never becomes the obstacle. Small, but it is a shipped cross-platform mobile app.',
+      metrics: [],
+      tags: ['React Native', 'Expo', 'TypeScript'],
+      href: 'https://github.com/NayakAnudeep/Clearhead',
+      label: 'GitHub',
+      context: 'Personal',
     },
     {
       id: 14,
-      title: "SpecDriven",
-      description: "Native SwiftUI macOS app for spec-driven development. Keeps product intent, requirements, acceptance criteria, implementation tasks, and decisions in a local workspace with Markdown export.",
-      technologies: ["Swift", "SwiftUI", "macOS", "JSON Storage", "Markdown Export", "Product Specs"],
-      github: "https://github.com/NayakAnudeep/latex_to_pdf"
+      title: 'Travel Recommendation API',
+      subtitle: 'Go service',
+      blurb:
+        'A compact Go API written as an interview demonstration — idiomatic handler structure, typed responses, and a surface small enough to read end to end.',
+      metrics: [],
+      tags: ['Go', 'REST API'],
+      href: 'https://github.com/NayakAnudeep/travel-recommendation-demo',
+      label: 'GitHub',
+      context: 'Personal',
     },
     {
       id: 15,
-      title: "Resume Generator",
-      description: "AI-powered resume generator that creates multiple bullet point variants for each role, stores them in PostgreSQL, matches the most relevant experience to a job description, and supports PDF downloads.",
-      technologies: ["Node.js", "Express", "OpenAI API", "PostgreSQL", "PDF Generation", "Resume Tailoring"],
-      github: "https://github.com/NayakAnudeep/resume_generator"
+      title: 'GRE Vocab Builder',
+      subtitle: 'First React project',
+      blurb:
+        'A flashcard app for GRE vocabulary — my first real attempt at React, written before AI assistance was around to lean on. It worked, and I used it through my own GRE prep.',
+      metrics: [],
+      tags: ['React', 'JavaScript'],
+      href: 'https://github.com/NayakAnudeep/gre-vocab-builder-app',
+      label: 'GitHub',
+      context: 'Personal · 2022',
     },
     {
       id: 16,
-      title: "Remon",
-      description: "Rust-based Redis monitor that polls Redis INFO metrics, tracks rolling history, and lays the groundwork for a terminal dashboard showing memory, clients, uptime, and operational status.",
-      technologies: ["Rust", "Tokio", "Redis", "Ratatui", "Crossterm", "TUI"],
-      github: "https://github.com/NayakAnudeep/remon"
+      title: 'Linux Desktop Configs',
+      subtitle: 'Hyprland and Qtile',
+      blurb:
+        'Window manager configurations I actually daily-drive — Hyprland with custom keybindings and workflow tuning, and a Qtile setup with themed layouts, Picom compositing, Kitty and Ranger config, and pywal theming. I like knowing how my tools work all the way down.',
+      metrics: [],
+      tags: ['Shell', 'Python', 'Linux', 'Hyprland', 'Qtile'],
+      href: 'https://github.com/NayakAnudeep/hyprland-dotfiles',
+      label: 'GitHub',
+      context: 'Personal',
     },
-    {
-      id: 17,
-      title: "Qtile Config",
-      description: "Custom Linux desktop configuration for Qtile with themed layouts, autostart scripts, Picom compositing, Kitty terminal settings, Ranger configuration, and pywal-based visual customization.",
-      technologies: ["Python", "Qtile", "Linux", "Shell Scripting", "Desktop Customization", "Dotfiles"],
-      github: "https://github.com/NayakAnudeep/qtile-config"
-    }
   ];
 
   const workExperience = [
     {
       id: 1,
-      company: "Actualize",
-      position: "Software Engineer",
-      duration: "October 2025 - Present",
-      location: "Boulder, Colorado",
+      company: 'Actualize',
+      position: 'Software Engineer',
+      duration: 'Oct 2025 — Present',
+      location: 'Boulder, Colorado',
+      note: 'One of two engineers. I own the infrastructure code.',
       responsibilities: [
-        "Architected Aether Chat, a context-aware AI conversational agent that processes historical user behavior and geospatial data to dynamically generate personalized, location-based event recommendations",
-        "Integrated Redis in-memory caching solution to optimize database queries and API responses, achieving up to 50% improvement in system performance metrics",
-        "Implemented RabbitMQ message queue system with graceful shutdown and startup mechanisms, reducing average processing wait times by over 500ms while ensuring zero message loss during deployments",
-        "Conducted comprehensive security assessments by pen testing over 255 API endpoints, identifying and documenting vulnerabilities to strengthen application security posture",
-        "Performed load testing and performance benchmarking using Schemathesis, analyzing response times and system behavior under stress to optimize API reliability"
+        'Architected an AI agent that walks API schemas, validates them against Schemathesis, and fixes what it finds — covering 169 API classes and surfacing authentication, schema-validation and security defects in over 40 of them. Designed it around LLM-interpreted markdown test specs rather than rigid Python test files, so coverage adapts as the schema moves',
+        'Built tooling that resolved 15+ confirmed security vulnerabilities across the API surface',
+        'Integrated Redis caching across 18 call sites in an existing PHP API of ~371 documented operations, cutting average response time roughly 50% on cache-eligible endpoints. The bulk of that came from geoqueries, previously recomputed on every request at 5–6 seconds each, now near-instant on a warm cache',
+        'Wrote the benchmark harness itself — toggling cache state and averaging response times — so the caching decision was measured rather than assumed',
+        'Implemented RabbitMQ from scratch across 6 queues and 5 worker processes with graceful startup and shutdown, cutting average processing wait by over 500ms with zero message loss during deploys',
+        'Took a founder prototype to MVP as an AI event-recommendation product: replaced pure RAG with hybrid dense and lexical retrieval fused by probabilistic scoring, added an MMR ranking layer to stop near-duplicate results, and labeled each step of the decision path so a recommendation can be explained',
+        'Implemented OAuth2 across 3 authorization-server grant types and up to 5 configurable external identity-provider workflows',
+        'Containerizing the production stack service by service — API layer, nginx, Redis, RabbitMQ — to enable horizontal scaling',
       ],
-      technologies: ["Redis", "RabbitMQ", "AI", "Geospatial Data", "Schemathesis", "API Testing", "Security Testing", "Performance Testing", "Python"]
+      technologies: ['PHP', 'Redis', 'RabbitMQ', 'Docker', 'OAuth2', 'Schemathesis', 'LLM APIs', 'Hybrid Retrieval', 'nginx', 'AWS'],
     },
     {
       id: 2,
-      company: "GE Healthcare",
-      position: "Software Engineer",
-      duration: "July 2022 - August 2023",
-      location: "Bangalore, India",
+      company: 'GE Healthcare',
+      position: 'Software Engineer',
+      duration: 'Jul 2022 — Aug 2023',
+      location: 'Bangalore, India',
+      note: 'Regulated manufacturing and supply chain.',
       responsibilities: [
-        "Led the end-to-end development of over 20 features using Java, Vaadin, REST API, and SQL, improving product functionality and efficiency",
-        "Successfully employed NYMI APIs collaborating with the client, a system to authenticate supply chain data entries, reducing time to authenticate the signature by over 80%",
-        "Resolved 40+ bugs within a year to ensure system stability and seamless operation. Collaborative team effort in bug resolution reduced downtime by over 20%",
-        "Played a key role in deployment, version control and code reviews, resolved critical bugs promptly to ensure zero downtime and updated relevant documentation"
+        'Integrated a Nymi biometric wearable as the authentication mechanism for production data entry, replacing per-step password entry and reducing authentication time by 80%',
+        'Delivered every feature twice — into a legacy Java system and a modern Node.js platform — maintaining parity while three factory sites migrated on their own timelines',
+        'Developed and deployed 20+ features focused on operator workflow speed, and resolved 40+ defects annually across both platforms',
+        'Identified and eliminated redundant repeated database queries found while working on unrelated modules — work nobody assigned',
+        'Built and deployed on Azure App Services with Azure DevOps pipelines against Microsoft SQL Server',
+        'Contributed to a team effort that reduced production downtime by 20% over one year on a decade-old manufacturing system',
       ],
-      technologies: ["Java", "Vaadin", "REST API", "SQL", "NYMI APIs"]
+      technologies: ['Java', 'Node.js', 'SQL', 'Azure', 'Azure DevOps', 'MS SQL Server', 'Biometric Auth'],
     },
     {
       id: 3,
-      company: "GE Renewable Energy",
-      position: "Software Engineering Intern",
-      duration: "January 2022 - June 2022",
-      location: "Bangalore, India",
+      company: 'GE Renewable Energy',
+      position: 'Software Engineering Intern',
+      duration: 'Jan 2022 — Jun 2022',
+      location: 'Bangalore, India',
+      note: 'Sustained a migration through heavy team attrition.',
       responsibilities: [
-        "Designed and implemented a modernized user interface using Angular 11 from Angular 6 using HTML5, CSS and TypeScript, completing over 12 user stories in span of 6 months",
-        "Built a model that categorizes incoming inconsistent data into the right categories using fuzzy logic with 98% accuracy, reducing data inconsistency in system",
-        "Helped the team with code cleanup and unit testing, resulting in SonarQube Metrics for coverage going up from 45% to 80%, duplication decreasing from 10% to 5%",
-        "Developed and designed a ratings page to capture NPS as a KPI index. The redesign increased the number of people giving ratings by 10%"
+        'Migrated a legacy UI four major versions from Angular 6 to Angular 11 without regressions',
+        'Became the only developer on the migration workstream after senior turnover, delivering knowledge transfer to an incoming vendor team lead and keeping a seven-month project on track to completion',
+        'Raised unit test coverage from 45% to 80% and reduced code duplication by 50%, both measured in SonarQube',
+        'Delivered 12+ user stories in six months on a short-staffed migration, and supported sprint planning at the product manager\'s request',
+        'Redesigned the ratings page to capture NPS as a KPI; the product manager reported increased participation afterwards, attributing it to a simpler flow',
       ],
-      technologies: ["Angular 11", "HTML5", "CSS", "TypeScript", "Fuzzy Logic", "SonarQube"]
-    }
+      technologies: ['Angular', 'TypeScript', 'HTML5', 'CSS', 'SonarQube', 'Jenkins'],
+    },
   ];
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const partTime = [
+    {
+      id: 1,
+      role: 'Graduate Scholarship Assistant',
+      org: 'University of Colorado Boulder',
+      duration: 'Oct 2024 — Apr 2025',
+      points: [
+        'Automated scholarship requirement tracking, improving turnaround and accuracy',
+        'Advised students on application requirements and scholarship maintenance',
+      ],
+    },
+    {
+      id: 2,
+      role: 'Student Assistant II — Catering',
+      org: 'University of Colorado Boulder',
+      duration: 'Feb 2024 — Dec 2024',
+      points: [
+        'Coordinated delivery and setup for campus events, holding quality and presentation standards',
+        'Trained and supervised new staff on procedures',
+      ],
+    },
+    {
+      id: 3,
+      role: 'Usher',
+      org: 'Macky Auditorium, CU Boulder',
+      duration: 'Sep 2023 — May 2025',
+      points: [
+        'Ran ticketing and guest check-in for performances',
+        'Managed crowd flow and front-of-house operations during events',
+      ],
+    },
+  ];
 
-  const nextProject = () => {
-    setCurrentIndex((prev) => (prev + 1) % projects.length);
+  /* Ordered by the priority weights in the achievement corpus. */
+  const skills = {
+    'Languages & Databases': ['Python', 'PHP', 'Java', 'JavaScript', 'TypeScript', 'SQL', 'Redis', 'PostgreSQL', 'MongoDB', 'Neo4j', 'ArangoDB', 'MS SQL Server', 'MySQL', 'Go', 'Rust', 'Bash', 'R'],
+    'Frameworks & Libraries': ['Node.js', 'NestJS', 'Django', 'FastAPI', 'React', 'Next.js', 'Angular', 'Spring Boot', 'Pandas', 'Scikit-learn', 'PyTorch', 'TensorFlow', 'Apache Spark'],
+    'AI & Retrieval': ['LLM APIs', 'RAG', 'Hybrid Retrieval', 'Vector Search', 'FAISS', 'ChromaDB', 'Agent Orchestration', 'Prompt Engineering', 'MMR Re-ranking', 'Graph Analytics'],
+    'Infrastructure & Tooling': ['Docker', 'RabbitMQ', 'AWS', 'Azure', 'GCP', 'nginx', 'OAuth2', 'REST APIs', 'CI/CD', 'Kubernetes', 'GitHub Actions', 'Jenkins', 'Linux', 'Schemathesis'],
   };
 
-  const prevProject = () => {
-    setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length);
-  };
+  const certificates = [
+    { name: 'Enterprise Design Thinking — Practitioner', issuer: 'IBM' },
+    { name: 'Team Essentials for AI', issuer: 'IBM' },
+    { name: 'Expressway to Data Science: R & Tidyverse Specialization', issuer: 'CU Boulder' },
+    { name: 'Data Analysis with Tidyverse', issuer: 'CU Boulder' },
+    { name: 'Introduction to R Programming and Tidyverse', issuer: 'CU Boulder' },
+    { name: 'R Programming and Tidyverse Capstone', issuer: 'CU Boulder' },
+    { name: 'Programming for Everybody (Python)', issuer: 'University of Michigan' },
+    { name: 'Foundations: Data, Data, Everywhere', issuer: 'Google' },
+  ];
+
+  /* Managers and supervisors who agreed to act as references. Contact details
+     are deliberately not published — recruiters request them directly. */
+  const references = [
+    {
+      name: 'Raghav Vanmali',
+      title: 'Senior Director, Technical Product Management',
+      org: 'GE Healthcare',
+      relation: 'Manager',
+    },
+    {
+      name: 'Sanchayan Maity',
+      title: 'Global Analytics Leader',
+      org: 'GE Vernova',
+      relation: 'Supervisor',
+    },
+    {
+      name: 'Rojana Savoye',
+      title: 'Front of House Director',
+      org: 'Macky Auditorium, CU Boulder',
+      relation: 'Supervisor',
+    },
+    {
+      name: 'Juicy',
+      title: 'Founder',
+      org: 'Actualize',
+      relation: 'Manager',
+    },
+  ];
+
+  const navLinks = [
+    ['about', 'About'],
+    ['work-experience', 'Experience'],
+    ['projects', 'Projects'],
+    ['skills', 'Skills'],
+    ['education', 'Education'],
+    ['awards', 'Awards'],
+    ['references', 'References'],
+    ['contact', 'Contact'],
+  ];
 
   return (
-    <div className="min-h-screen bg-off-white font-poppins">
+    <div className="min-h-screen bg-bg font-sans text-fg">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-off-white/95 backdrop-blur-sm flex justify-between items-center px-6 md:px-12 lg:px-20 xl:px-32 py-8">
-        <div className="text-2xl font-bold text-gray-dark">
-          Anudeep
+      <header className="fixed top-0 inset-x-0 z-50 bg-bg/85 backdrop-blur-md border-b border-hair">
+        <div className="flex justify-between items-center px-6 md:px-12 lg:px-20 xl:px-32 h-16">
+          <a href="#about" className="font-serif text-xl tracking-tight text-fg shrink-0">
+            Anudeep Nayak
+          </a>
+          <nav className="hidden md:flex items-center gap-7">
+            {navLinks.map(([id, label]) => (
+              <a
+                key={id}
+                href={`#${id}`}
+                className="text-[13px] text-muted hover:text-accent transition-colors duration-200"
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
         </div>
-        <nav className="hidden md:flex space-x-6">
-          <a href="#about" className="text-gray-dark hover:text-gray-light transition-colors duration-200">About</a>
-          <a href="#skills" className="text-gray-dark hover:text-gray-light transition-colors duration-200">Skills</a>
-          <a href="#education" className="text-gray-dark hover:text-gray-light transition-colors duration-200">Education</a>
-          <a href="#work-experience" className="text-gray-dark hover:text-gray-light transition-colors duration-200">Experience</a>
-          <a href="#projects" className="text-gray-dark hover:text-gray-light transition-colors duration-200">Projects</a>
-          <a href="#part-time" className="text-gray-dark hover:text-gray-light transition-colors duration-200">Part-time</a>
-          <a href="#certificates" className="text-gray-dark hover:text-gray-light transition-colors duration-200">Certificates</a>
-          <a href="#contact" className="text-gray-dark hover:text-gray-light transition-colors duration-200">Contact</a>
+
+        {/* Phones: the desktop nav would not fit, so the links scroll sideways
+            in their own strip rather than disappearing behind a menu button. */}
+        <nav className="md:hidden nav-scroll flex items-center gap-5 px-6 pb-3 -mt-1">
+          {navLinks.map(([id, label]) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              className="text-[13px] text-muted whitespace-nowrap shrink-0 py-1"
+            >
+              {label}
+            </a>
+          ))}
         </nav>
       </header>
 
-      {/* Hero Section */}
-      <section id="about" className="px-6 md:px-12 lg:px-20 xl:px-32 py-24 md:py-32 pt-32 md:pt-40 relative overflow-hidden">
-        {/* Logo Overlay - centered to entire section */}
-        <motion.div
-          className="absolute left-0 right-0 top-0 bottom-0 pointer-events-none hidden lg:flex items-center justify-center"
-          style={{ opacity: 0.15 }}
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 0.15, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0.5 }}
-        >
-          <img
-            src="/logo.png"
-            alt=""
-            className="w-[600px] h-auto"
-            style={{
-              filter: 'grayscale(100%)'
-            }}
-          />
-        </motion.div>
-
-        <div className="grid md:grid-cols-2 gap-16 items-center relative z-10">
-          <motion.div
-            className="space-y-8"
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <div className="space-y-6">
-              <motion.p
-                className="text-gray-light text-xl"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-              >
-                Hey there! I'm
-              </motion.p>
-              <motion.h1
-                className="text-5xl md:text-7xl font-bold text-gray-dark leading-tight"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-              >
-                Anudeep Nayak
-              </motion.h1>
-              <motion.a
+      {/* Hero */}
+      <section id="about" className="px-6 md:px-12 lg:px-20 xl:px-32 pt-40 md:pt-44 pb-24 md:pb-28">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-[1.35fr_1fr] gap-14 md:gap-16 items-center">
+          <motion.div {...fadeUp}>
+            <p className="eyebrow mb-5">Software Engineer</p>
+            <h1 className="font-serif text-5xl md:text-7xl leading-[1.05] tracking-tight text-fg">
+              Anudeep Nayak
+            </h1>
+            <div className="rule w-16 my-7" style={{ background: 'var(--accent)', height: '2px' }} />
+            <p className="text-lg md:text-xl text-muted leading-relaxed max-w-xl">
+              I build backend systems and the AI tooling around them — caching, message
+              queues, retrieval pipelines, and agents that check their own work. Currently
+              one of two engineers at Actualize, where I own the infrastructure. Previously
+              GE Healthcare; MS in Data Science from CU Boulder.
+            </p>
+            <div className="flex flex-wrap items-center gap-3 mt-9">
+              <a
                 href="/resume/anudeep_nayak.pdf"
                 download="Anudeep_Nayak_Resume.pdf"
-                className="bg-gray-dark text-off-white px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-light transition-colors duration-200 w-fit inline-block"
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.5 }}
+                className="px-5 py-3 sm:py-2.5 rounded-full text-sm font-medium bg-fg text-bg hover:bg-accent transition-colors duration-200"
               >
                 Résumé
-              </motion.a>
-            </div>
-
-            <motion.div
-              className="flex items-start space-x-4"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-            >
-              <img
-                src="/black-cat.png"
-                alt="Black cat icon"
-                className="w-8 h-8 mt-1 flex-shrink-0"
-              />
-              <p className="text-gray-dark text-xl leading-relaxed">
-                Data Science MS candidate with software engineering experience at GE Healthcare, combining AI/ML expertise and full-stack development skills.
-              </p>
-            </motion.div>
-          </motion.div>
-
-          <motion.div
-            className="flex justify-center md:justify-end"
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <div className="w-80 h-96 md:w-96 md:h-[500px]">
-              <img
-                src="/IMG_7121.PNG"
-                alt="Anudeep Nayak"
-                className="w-full h-full object-contain grayscale hover:grayscale-0 transition-all duration-500"
-                style={{
-                  maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 80%, rgba(0,0,0,0) 100%)',
-                  WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 80%, rgba(0,0,0,0) 100%)'
-                }}
-              />
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Skills Section */}
-      <section id="skills" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28 pt-40 relative overflow-hidden min-h-screen">
-        {/* Background Cat Image - positioned on the left side */}
-        <motion.div
-          className="absolute left-0 top-1/2 -translate-y-1/2 pointer-events-none hidden lg:block"
-          style={{ opacity: 0.8 }}
-          initial={{ opacity: 0, x: -100 }}
-          whileInView={{ opacity: 0.8, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <img
-            src="/cat_tech.png"
-            alt=""
-            className="w-96 h-auto"
-            style={{
-              filter: 'grayscale(100%)'
-            }}
-          />
-        </motion.div>
-
-        <div className="relative z-10">
-          <motion.div
-            className="text-center mb-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="flex items-center justify-center mb-6">
-              <img src="/cat_skills.png" alt="Skills" className="w-8 h-8 mr-3" />
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-dark">Technical Skills</h2>
-            </div>
-            <p className="text-gray-light text-xl text-center">
-              Technologies and tools I work with to build impactful solutions.
-            </p>
-          </motion.div>
-
-        <div className="max-w-6xl mx-auto space-y-12">
-          {/* Languages & Database */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <h3 className="text-2xl font-bold text-gray-dark mb-6 text-center">Languages & Database</h3>
-            <motion.div
-              className="flex flex-wrap justify-center gap-4"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={{
-                visible: {
-                  transition: {
-                    staggerChildren: 0.03
-                  }
-                }
-              }}
-            >
-              {["Python", "Java", "Javascript", "Typescript", "SQL", "Django", "MySQL", "React", "Neo4j", "AuraDB", "ArangoDB", "AQL", "R", "HTML", "CSS", "Redis"].map((skill, index) => {
-                const colorClasses = [
-                  "bg-blue-100 text-blue-800 hover:bg-blue-200",
-                  "bg-orange-100 text-orange-800 hover:bg-orange-200",
-                  "bg-yellow-100 text-yellow-800 hover:bg-yellow-200",
-                  "bg-blue-100 text-blue-800 hover:bg-blue-200",
-                  "bg-indigo-100 text-indigo-800 hover:bg-indigo-200",
-                  "bg-green-100 text-green-800 hover:bg-green-200",
-                  "bg-orange-100 text-orange-800 hover:bg-orange-200",
-                  "bg-cyan-100 text-cyan-800 hover:bg-cyan-200",
-                  "bg-emerald-100 text-emerald-800 hover:bg-emerald-200",
-                  "bg-teal-100 text-teal-800 hover:bg-teal-200",
-                  "bg-purple-100 text-purple-800 hover:bg-purple-200",
-                  "bg-pink-100 text-pink-800 hover:bg-pink-200",
-                  "bg-green-100 text-green-800 hover:bg-green-200",
-                  "bg-red-100 text-red-800 hover:bg-red-200",
-                  "bg-blue-100 text-blue-800 hover:bg-blue-200",
-                  "bg-red-100 text-red-800 hover:bg-red-200"
-                ];
-                return (
-                  <motion.span
-                    key={skill}
-                    className={`${colorClasses[index]} px-6 py-3 rounded-full text-lg font-medium transition-colors duration-200`}
-                    variants={{
-                      hidden: { opacity: 0, scale: 0.8 },
-                      visible: { opacity: 1, scale: 1 }
-                    }}
-                  >
-                    {skill}
-                  </motion.span>
-                );
-              })}
-            </motion.div>
-          </motion.div>
-
-          {/* Tools & Technology */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <h3 className="text-2xl font-bold text-gray-dark mb-6 text-center">Tools & Technology</h3>
-            <motion.div
-              className="flex flex-wrap justify-center gap-4"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={{
-                visible: {
-                  transition: {
-                    staggerChildren: 0.03
-                  }
-                }
-              }}
-            >
-              {["Git", "Github", "Agile", "CI/CD", "Jenkins", "REST APIs", "AWS", "Azure Cloud", "IBM Cloud", "GCP", "Docker", "Kafka"].map((tool, index) => {
-                const colorClasses = [
-                  "bg-slate-100 text-slate-800 hover:bg-slate-200",
-                  "bg-gray-100 text-gray-800 hover:bg-gray-200",
-                  "bg-emerald-100 text-emerald-800 hover:bg-emerald-200",
-                  "bg-teal-100 text-teal-800 hover:bg-teal-200",
-                  "bg-amber-100 text-amber-800 hover:bg-amber-200",
-                  "bg-lime-100 text-lime-800 hover:bg-lime-200",
-                  "bg-orange-100 text-orange-800 hover:bg-orange-200",
-                  "bg-blue-100 text-blue-800 hover:bg-blue-200",
-                  "bg-blue-100 text-blue-800 hover:bg-blue-200",
-                  "bg-red-100 text-red-800 hover:bg-red-200",
-                  "bg-cyan-100 text-cyan-800 hover:bg-cyan-200",
-                  "bg-purple-100 text-purple-800 hover:bg-purple-200"
-                ];
-                return (
-                  <motion.span
-                    key={tool}
-                    className={`${colorClasses[index]} px-6 py-3 rounded-full text-lg font-medium transition-colors duration-200`}
-                    variants={{
-                      hidden: { opacity: 0, scale: 0.8 },
-                      visible: { opacity: 1, scale: 1 }
-                    }}
-                  >
-                    {tool}
-                  </motion.span>
-                );
-              })}
-            </motion.div>
-          </motion.div>
-        </div>
-        </div>
-      </section>
-
-      {/* Education Section */}
-      <section id="education" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28 relative overflow-hidden">
-        {/* Background Cat Image - positioned on the right side */}
-        <motion.div
-          className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none hidden lg:block"
-          style={{ opacity: 0.8 }}
-          initial={{ opacity: 0, x: 100 }}
-          whileInView={{ opacity: 0.8, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <img
-            src="/cat_edu.png"
-            alt=""
-            className="w-96 h-auto"
-            style={{
-              filter: 'grayscale(100%)'
-            }}
-          />
-        </motion.div>
-
-        <div className="relative z-10">
-          <motion.div
-            className="text-center mb-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="flex items-center justify-center mb-6">
-              <img src="/cat_education.png" alt="Education" className="w-8 h-8 mr-3" />
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-dark">Education</h2>
-            </div>
-            <p className="text-gray-light text-xl text-center">
-              My academic background in Computer Science and Data Science.
-            </p>
-          </motion.div>
-
-        <div className="max-w-4xl mx-auto space-y-12">
-          {/* Masters Degree */}
-          <motion.div
-            className="rounded-2xl p-8 transition-all duration-300 hover:bg-[#FEFCFC]"
-            style={{ backgroundColor: 'transparent' }}
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
-              <div>
-                <h3 className="text-2xl font-bold text-gray-dark mb-2">MS in Data Science</h3>
-                <h4 className="text-xl text-gray-light font-medium mb-1">University of Colorado Boulder</h4>
-                <p className="text-gray-light">GPA: 3.93</p>
-              </div>
-              <div className="mt-2 md:mt-0">
-                <span className="bg-gray-dark text-off-white px-4 py-2 rounded-full text-sm font-medium">
-                  August 2023 - May 2025
-                </span>
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-2 mt-4">
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">Data Science</span>
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">Machine Learning</span>
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">AI</span>
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">Statistical Analysis</span>
-            </div>
-          </motion.div>
-
-          {/* Bachelors Degree */}
-          <motion.div
-            className="rounded-2xl p-8 transition-all duration-300 hover:bg-[#FEFCFC]"
-            style={{ backgroundColor: 'transparent' }}
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
-              <div>
-                <h3 className="text-2xl font-bold text-gray-dark mb-2">B. Tech in Computer Science and Engineering</h3>
-                <h4 className="text-xl text-gray-light font-medium mb-1">Manipal Institute of Technology</h4>
-                <p className="text-gray-light">Manipal, India</p>
-              </div>
-              <div className="mt-2 md:mt-0">
-                <span className="bg-gray-dark text-off-white px-4 py-2 rounded-full text-sm font-medium">
-                  August 2018 - June 2022
-                </span>
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-2 mt-4">
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">Computer Science</span>
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">Software Engineering</span>
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">Algorithms</span>
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">Data Structures</span>
-            </div>
-          </motion.div>
-        </div>
-        </div>
-      </section>
-
-      {/* Work Experience Section */}
-      <section id="work-experience" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28 relative overflow-hidden">
-        {/* Background Cat Image - positioned on the left side */}
-        <motion.div
-          className="absolute left-0 top-1/2 -translate-y-1/2 pointer-events-none hidden lg:block"
-          style={{ opacity: 0.8 }}
-          initial={{ opacity: 0, x: -100 }}
-          whileInView={{ opacity: 0.8, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <img
-            src="/cat_work.png"
-            alt=""
-            className="w-96 h-auto"
-            style={{
-              filter: 'grayscale(100%)'
-            }}
-          />
-        </motion.div>
-
-        <div className="relative z-10">
-          <motion.div
-            className="text-center mb-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="flex items-center justify-center mb-6">
-              <img src="/cat_work_experience.png" alt="Work Experience" className="w-8 h-8 mr-3" />
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-dark">Work Experience</h2>
-            </div>
-            <p className="text-gray-light text-xl text-center">
-              My professional journey and the impact I've made at various organizations.
-            </p>
-          </motion.div>
-
-        <div className="max-w-4xl mx-auto">
-          {workExperience.map((job, index) => (
-            <motion.div
-              key={job.id}
-              className="relative"
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.15 }}
-            >
-              {/* Timeline line */}
-              {index !== workExperience.length - 1 && (
-                <div className="absolute left-8 top-16 w-0.5 h-full bg-gray-light/30"></div>
-              )}
-
-              {/* Timeline dot */}
-              <div className="absolute left-6 top-8 w-4 h-4 bg-gray-dark rounded-full"></div>
-
-              {/* Content */}
-              <div className="ml-16 mb-16">
-                <div className="rounded-2xl p-8 transition-all duration-300 hover:bg-[#FEFCFC]"
-                style={{ backgroundColor: 'transparent' }}>
-                  <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
-                    <div>
-                      <h3 className="text-2xl font-bold text-gray-dark mb-2">{job.position}</h3>
-                      <h4 className="text-xl text-gray-light font-medium mb-1">{job.company}</h4>
-                      <p className="text-gray-light">{job.location}</p>
-                    </div>
-                    <div className="mt-2 md:mt-0">
-                      <span className="bg-gray-dark text-off-white px-4 py-2 rounded-full text-sm font-medium">
-                        {job.duration}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="mb-6">
-                    <h5 className="text-lg font-semibold text-gray-dark mb-3">Key Responsibilities:</h5>
-                    <ul className="space-y-2">
-                      {job.responsibilities.map((responsibility, idx) => (
-                        <li key={idx} className="flex items-start">
-                          <span className="text-gray-dark mr-2 mt-1">•</span>
-                          <span className="text-gray-light leading-relaxed">{responsibility}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div>
-                    <h5 className="text-lg font-semibold text-gray-dark mb-3">Technologies Used:</h5>
-                    <div className="flex flex-wrap gap-2">
-                      {job.technologies.map((tech, idx) => {
-                        const colorClasses = [
-                          "bg-blue-100 text-blue-800",
-                          "bg-orange-100 text-orange-800", 
-                          "bg-yellow-100 text-yellow-800",
-                          "bg-indigo-100 text-indigo-800",
-                          "bg-cyan-100 text-cyan-800",
-                          "bg-purple-100 text-purple-800",
-                          "bg-pink-100 text-pink-800",
-                          "bg-green-100 text-green-800",
-                          "bg-red-100 text-red-800",
-                          "bg-slate-100 text-slate-800",
-                          "bg-emerald-100 text-emerald-800",
-                          "bg-teal-100 text-teal-800"
-                        ];
-                        const colorClass = colorClasses[idx % colorClasses.length];
-                        return (
-                          <span key={idx} className={`${colorClass} px-3 py-1 rounded-full text-sm font-medium hover:opacity-80 transition-opacity duration-200`}>
-                            {tech}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-        </div>
-      </section>
-
-
-      {/* Projects Section */}
-      <section id="projects" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28 relative overflow-hidden">
-        {/* Background Cat Image - positioned on the right side */}
-        <motion.div
-          className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none hidden lg:block"
-          style={{ opacity: 0.8 }}
-          initial={{ opacity: 0, x: 100 }}
-          whileInView={{ opacity: 0.8, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <img
-            src="/cat_project.png"
-            alt=""
-            className="w-96 h-auto"
-            style={{
-              filter: 'grayscale(100%)'
-            }}
-          />
-        </motion.div>
-
-        <div className="relative z-10">
-          <motion.div
-            className="text-center mb-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="flex items-center justify-center mb-6">
-              <img src="/cat_projects.png" alt="Projects" className="w-8 h-8 mr-3" />
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-dark">Featured Projects</h2>
-            </div>
-            <p className="text-gray-light text-xl text-center leading-relaxed">
-              Here are some of my recent works that showcase my skills and experience.
-            </p>
-          </motion.div>
-
-          <div className="relative">
-            {/* Navigation Arrows */}
-            <button 
-              onClick={prevProject}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-gray-dark text-off-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-gray-light transition-colors duration-200 shadow-lg"
-            >
-              ←
-            </button>
-            <button 
-              onClick={nextProject}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-gray-dark text-off-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-gray-light transition-colors duration-200 shadow-lg"
-            >
-              →
-            </button>
-
-            {/* Projects Container */}
-            <div className="overflow-hidden mx-16">
-              <div 
-                className="flex transition-transform duration-500 ease-in-out"
-                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+              </a>
+              <a
+                href="https://github.com/NayakAnudeep"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-3 sm:py-2.5 rounded-full text-sm font-medium border border-hair-2 text-fg hover:border-accent hover:text-accent transition-colors duration-200"
               >
-                {projects.map((project) => (
-                  <div key={project.id} className="w-full flex-shrink-0 px-4">
-                    <div className="bg-off-white rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 max-w-2xl mx-auto">
-                      <div className="p-10 space-y-6">
-                        <h3 className="text-3xl font-bold text-gray-dark">{project.title}</h3>
-                        <p className="text-gray-light text-lg leading-relaxed">
-                          {project.description}
-                        </p>
-                        <div className="flex flex-wrap gap-3">
-                          {project.technologies.map((tech, index) => {
-                            const colorClasses = [
-                              "bg-blue-100 text-blue-800",
-                              "bg-orange-100 text-orange-800", 
-                              "bg-yellow-100 text-yellow-800",
-                              "bg-indigo-100 text-indigo-800",
-                              "bg-cyan-100 text-cyan-800",
-                              "bg-purple-100 text-purple-800",
-                              "bg-pink-100 text-pink-800",
-                              "bg-green-100 text-green-800",
-                              "bg-red-100 text-red-800",
-                              "bg-slate-100 text-slate-800",
-                              "bg-emerald-100 text-emerald-800",
-                              "bg-teal-100 text-teal-800"
-                            ];
-                            const colorClass = colorClasses[index % colorClasses.length];
-                            return (
-                              <span key={index} className={`${colorClass} px-4 py-2 rounded-full text-sm font-medium hover:opacity-80 transition-opacity duration-200`}>
-                                {tech}
-                              </span>
-                            );
-                          })}
-                        </div>
-                        <div className="flex gap-6 pt-4">
-                          <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-gray-dark hover:text-gray-light transition-colors duration-200 font-medium">
-                            {project.github.includes('github.com') ? 'GitHub →' : 'Website →'}
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Dots Indicator */}
-            <div className="flex justify-center mt-8 space-x-2">
-              {projects.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`w-3 h-3 rounded-full transition-colors duration-200 ${
-                    index === currentIndex ? 'bg-gray-dark' : 'bg-gray-light/40'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-
-
-      {/* Part-time Roles Section */}
-      <section id="part-time" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28 relative overflow-hidden">
-        {/* Background Cat Image - positioned on the left side */}
-        <motion.div
-          className="absolute left-0 top-1/2 -translate-y-1/2 pointer-events-none hidden lg:block"
-          style={{ opacity: 0.8 }}
-          initial={{ opacity: 0, x: -100 }}
-          whileInView={{ opacity: 0.8, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <img
-            src="/cat_pt.png"
-            alt=""
-            className="w-96 h-auto"
-            style={{
-              filter: 'grayscale(100%)'
-            }}
-          />
-        </motion.div>
-
-        <div className="relative z-10">
-          <motion.div
-            className="text-center mb-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="flex items-center justify-center mb-6">
-              <img src="/cat_part_time.png" alt="Part-time" className="w-8 h-8 mr-3" />
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-dark">Part-time Roles</h2>
-            </div>
-            <p className="text-gray-light text-xl text-center">
-              Additional work experience during my graduate studies at University of Colorado Boulder.
-            </p>
-          </motion.div>
-
-        <div className="max-w-4xl mx-auto space-y-12">
-          {/* Usher Position */}
-          <motion.div
-            className="rounded-2xl p-8"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
-              <div>
-                <h3 className="text-2xl font-bold text-gray-dark mb-2">Usher</h3>
-                <h4 className="text-xl text-gray-light font-medium mb-1">Macky Auditorium, University of Colorado Boulder</h4>
-                <p className="text-gray-light">Boulder, CO</p>
-              </div>
-              <div className="mt-2 md:mt-0">
-                <span className="bg-gray-dark text-off-white px-4 py-2 rounded-full text-sm font-medium">
-                  September 2023 - May 2025
-                </span>
-              </div>
-            </div>
-            
-            <div className="mb-6">
-              <h5 className="text-lg font-semibold text-gray-dark mb-3">Key Responsibilities:</h5>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <span className="text-gray-dark mr-2 mt-1">•</span>
-                  <span className="text-gray-light leading-relaxed">Managed ticketing operations and guest check-in processes for events at Macky Auditorium</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-gray-dark mr-2 mt-1">•</span>
-                  <span className="text-gray-light leading-relaxed">Provided exceptional customer service and assistance to guests attending performances and events</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-gray-dark mr-2 mt-1">•</span>
-                  <span className="text-gray-light leading-relaxed">Ensured smooth event operations and maintained crowd control during performances</span>
-                </li>
-              </ul>
-            </div>
-            
-            <div className="flex flex-wrap gap-2">
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">Customer Service</span>
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">Event Management</span>
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">Ticketing Systems</span>
+                GitHub
+              </a>
+              <a
+                href="https://linkedin.com/in/Anudeep-Nayak"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-3 sm:py-2.5 rounded-full text-sm font-medium border border-hair-2 text-fg hover:border-accent hover:text-accent transition-colors duration-200"
+              >
+                LinkedIn
+              </a>
             </div>
           </motion.div>
 
-          {/* Student Assistant II */}
           <motion.div
-            className="rounded-2xl p-8"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
-              <div>
-                <h3 className="text-2xl font-bold text-gray-dark mb-2">Student Assistant II - Catering</h3>
-                <h4 className="text-xl text-gray-light font-medium mb-1">University of Colorado Boulder</h4>
-                <p className="text-gray-light">Boulder, CO</p>
-              </div>
-              <div className="mt-2 md:mt-0">
-                <span className="bg-gray-dark text-off-white px-4 py-2 rounded-full text-sm font-medium">
-                  February 2024 - December 2024
-                </span>
-              </div>
-            </div>
-            
-            <div className="mb-6">
-              <h5 className="text-lg font-semibold text-gray-dark mb-3">Key Responsibilities:</h5>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <span className="text-gray-dark mr-2 mt-1">•</span>
-                  <span className="text-gray-light leading-relaxed">Ensured food quality and proper presentation standards for university catering events</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-gray-dark mr-2 mt-1">•</span>
-                  <span className="text-gray-light leading-relaxed">Coordinated food delivery and setup for various campus events and functions</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-gray-dark mr-2 mt-1">•</span>
-                  <span className="text-gray-light leading-relaxed">Managed event operations and supervised new employees as Student Assistant II</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-gray-dark mr-2 mt-1">•</span>
-                  <span className="text-gray-light leading-relaxed">Mentored and trained new catering staff members on procedures and standards</span>
-                </li>
-              </ul>
-            </div>
-            
-            <div className="flex flex-wrap gap-2">
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">Team Leadership</span>
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">Event Coordination</span>
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">Quality Control</span>
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">Mentoring</span>
-            </div>
-          </motion.div>
-
-          {/* Graduate Scholarship Assistant */}
-          <motion.div
-            className="rounded-2xl p-8 transition-all duration-300 hover:bg-[#FEFCFC]"
-            style={{ backgroundColor: 'transparent' }}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
-              <div>
-                <h3 className="text-2xl font-bold text-gray-dark mb-2">Graduate Scholarship Assistant</h3>
-                <h4 className="text-xl text-gray-light font-medium mb-1">University of Colorado Boulder</h4>
-                <p className="text-gray-light">Boulder, CO</p>
-              </div>
-              <div className="mt-2 md:mt-0">
-                <span className="bg-gray-dark text-off-white px-4 py-2 rounded-full text-sm font-medium">
-                  October 2024 - April 2025
-                </span>
-              </div>
-            </div>
-            
-            <div className="mb-6">
-              <h5 className="text-lg font-semibold text-gray-dark mb-3">Key Responsibilities:</h5>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <span className="text-gray-dark mr-2 mt-1">•</span>
-                  <span className="text-gray-light leading-relaxed">Assisted students with scholarship application questions and requirement clarifications</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-gray-dark mr-2 mt-1">•</span>
-                  <span className="text-gray-light leading-relaxed">Automated scholarship requirement tracking systems to improve efficiency and accuracy</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-gray-dark mr-2 mt-1">•</span>
-                  <span className="text-gray-light leading-relaxed">Conducted scholarship counseling sessions to support students with academic and personal challenges</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-gray-dark mr-2 mt-1">•</span>
-                  <span className="text-gray-light leading-relaxed">Provided guidance on scholarship maintenance and academic success strategies</span>
-                </li>
-              </ul>
-            </div>
-            
-            <div className="flex flex-wrap gap-2">
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">Student Counseling</span>
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">Process Automation</span>
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">Academic Support</span>
-              <span className="bg-gray-light/20 text-gray-dark px-3 py-1 rounded-full text-sm font-medium">Administrative Support</span>
-            </div>
-          </motion.div>
-        </div>
-        </div>
-      </section>
-
-      {/* Certificates & Awards Section */}
-      <section id="certificates" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28 relative overflow-hidden">
-        {/* Background Cat Image - positioned on the left side */}
-        <motion.div
-          className="absolute left-0 top-1/2 -translate-y-1/2 pointer-events-none hidden lg:block"
-          style={{ opacity: 0.8 }}
-          initial={{ opacity: 0, x: -100 }}
-          whileInView={{ opacity: 0.8, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <img
-            src="/cat_awards.png"
-            alt=""
-            className="w-96 h-auto"
-            style={{
-              filter: 'grayscale(100%)'
-            }}
-          />
-        </motion.div>
-
-        <div className="relative z-10">
-          <motion.div
-            className="text-center mb-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="flex items-center justify-center mb-6">
-              <img src="/cat_certificates.png" alt="Certificates" className="w-8 h-8 mr-3" />
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-dark">Certificates & Awards</h2>
-            </div>
-            <p className="text-gray-light text-xl text-center">
-              Professional certifications and recognition of achievements.
-            </p>
-          </motion.div>
-
-        <div className="max-w-4xl mx-auto">
-          {/* Certificates */}
-          <motion.div
-            className="mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            <h3 className="text-2xl font-bold text-gray-dark mb-8 text-center">Certificates</h3>
-            <motion.div
-              className="grid md:grid-cols-2 gap-4"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={{
-                visible: {
-                  transition: {
-                    staggerChildren: 0.05
-                  }
-                }
-              }}
-            >
-              <motion.div
-                className="rounded-xl p-4 transition-all duration-300 hover:bg-[#FEFCFC]"
-                style={{ backgroundColor: 'transparent' }}
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0 }
-                }}
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <img src="/ibm.png" alt="IBM" className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h4 className="text-base font-bold text-gray-dark">Enterprise Design Thinking – Practitioner</h4>
-                    <p className="text-gray-light text-sm">IBM</p>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="rounded-xl p-4 transition-all duration-300 hover:bg-[#FEFCFC]"
-                style={{ backgroundColor: 'transparent' }}
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0 }
-                }}
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <img src="/ibm.png" alt="IBM" className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h4 className="text-base font-bold text-gray-dark">Team Essentials for AI</h4>
-                    <p className="text-gray-light text-sm">IBM</p>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="rounded-xl p-4 transition-all duration-300 hover:bg-[#FEFCFC]"
-                style={{ backgroundColor: 'transparent' }}
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0 }
-                }}
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <img src="/CU-Boulder-Symbol.png" alt="University of Colorado Boulder" />
-                  </div>
-                  <div>
-                    <h4 className="text-base font-bold text-gray-dark">Expressway to Data Science: R Programming and Tidyverse Specialization</h4>
-                    <p className="text-gray-light text-sm">University of Colorado Boulder</p>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="rounded-xl p-4 transition-all duration-300 hover:bg-[#FEFCFC]"
-                style={{ backgroundColor: 'transparent' }}
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0 }
-                }}
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <img src="/michigan.png" alt="University of Michigan" className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h4 className="text-base font-bold text-gray-dark">Programming for Everybody (Getting Started with Python)</h4>
-                    <p className="text-gray-light text-sm">University of Michigan</p>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="rounded-xl p-4 transition-all duration-300 hover:bg-[#FEFCFC]"
-                style={{ backgroundColor: 'transparent' }}
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0 }
-                }}
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <img src="/CU-Boulder-Symbol.png" alt="University of Colorado Boulder" />
-                  </div>
-                  <div>
-                    <h4 className="text-base font-bold text-gray-dark">Data Analysis with Tidyverse</h4>
-                    <p className="text-gray-light text-sm">University of Colorado Boulder</p>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="rounded-xl p-4 transition-all duration-300 hover:bg-[#FEFCFC]"
-                style={{ backgroundColor: 'transparent' }}
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0 }
-                }}
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <img src="/google.png" alt="Google" className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h4 className="text-base font-bold text-gray-dark">Foundations: Data, Data, Everywhere</h4>
-                    <p className="text-gray-light text-sm">Google</p>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="rounded-xl p-4 transition-all duration-300 hover:bg-[#FEFCFC]"
-                style={{ backgroundColor: 'transparent' }}
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0 }
-                }}
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <img src="/CU-Boulder-Symbol.png" alt="University of Colorado Boulder" />
-                  </div>
-                  <div>
-                    <h4 className="text-base font-bold text-gray-dark">Introduction to R Programming and Tidyverse</h4>
-                    <p className="text-gray-light text-sm">University of Colorado Boulder</p>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="rounded-xl p-4 transition-all duration-300 hover:bg-[#FEFCFC]"
-                style={{ backgroundColor: 'transparent' }}
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0 }
-                }}
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <img src="/CU-Boulder-Symbol.png" alt="University of Colorado Boulder" />
-                  </div>
-                  <div>
-                    <h4 className="text-base font-bold text-gray-dark">R Programming and Tidyverse Capstone Project</h4>
-                    <p className="text-gray-light text-sm">University of Colorado Boulder</p>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          </motion.div>
-
-          {/* Awards */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <h3 className="text-2xl font-bold text-gray-dark mb-8 text-center">Awards</h3>
-            <motion.div
-              className="grid md:grid-cols-2 gap-8"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={{
-                visible: {
-                  transition: {
-                    staggerChildren: 0.1
-                  }
-                }
-              }}
-            >
-              <motion.div
-                className="rounded-xl p-6 transition-all duration-300 hover:bg-[#FEFCFC]"
-                style={{ backgroundColor: 'transparent' }}
-                variants={{
-                  hidden: { opacity: 0, scale: 0.9 },
-                  visible: { opacity: 1, scale: 1 }
-                }}
-              >
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <img src="/awards.png" alt="Award" className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-bold text-gray-dark">GE Renewables DT Hackathon - First Prize</h4>
-                    <p className="text-gray-light">Resume Classification System</p>
-                    <p className="text-gray-light text-sm mt-1">83% classification accuracy using KNN algorithm and custom NLP</p>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="rounded-xl p-6 transition-all duration-300 hover:bg-[#FEFCFC]"
-                style={{ backgroundColor: 'transparent' }}
-                variants={{
-                  hidden: { opacity: 0, scale: 0.9 },
-                  visible: { opacity: 1, scale: 1 }
-                }}
-              >
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <img src="/CU-Boulder-Symbol.png" alt="University" />
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-bold text-gray-dark">High Academic Performance</h4>
-                    <p className="text-gray-light">MS Data Science - GPA 3.93</p>
-                    <p className="text-gray-light text-sm mt-1">University of Colorado Boulder</p>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          </motion.div>
-        </div>
-        </div>
-      </section>
-
-      {/* Referral Section */}
-      <section id="referrals" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28 relative overflow-hidden">
-        {/* Background Cat Image - positioned on the right side */}
-        <motion.div
-          className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none hidden lg:block"
-          style={{ opacity: 0.8 }}
-          initial={{ opacity: 0, x: 100 }}
-          whileInView={{ opacity: 0.8, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <img
-            src="/cat_reference.png"
-            alt=""
-            className="w-96 h-auto"
-            style={{
-              filter: 'grayscale(100%)'
-            }}
-          />
-        </motion.div>
-
-        <div className="relative z-10">
-          <motion.div
-            className="text-center mb-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="flex items-center justify-center mb-6">
-              <img src="/cat_reference.png" alt="References" className="w-8 h-8 mr-3" />
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-dark">Professional References</h2>
-            </div>
-            <p className="text-gray-light text-xl text-center">
-              Contact these professionals to learn more about my work, skills, and contributions.
-            </p>
-          </motion.div>
-
-        <div className="max-w-5xl mx-auto">
-          <motion.div
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={{
-              visible: {
-                transition: {
-                  staggerChildren: 0.1
-                }
-              }
-            }}
-          >
-
-            {/* Reference 1 - Manager Placeholder */}
-            <motion.div
-              className="rounded-2xl p-8 transition-all duration-300 text-center hover:bg-[#FEFCFC]"
-              style={{ backgroundColor: 'transparent' }}
-              variants={{
-                hidden: { opacity: 0, y: 30 },
-                visible: { opacity: 1, y: 0 }
-              }}
-            >
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <img src="/user.png" alt="User" className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-dark mb-2">Raghav Vanmali</h3>
-              <p className="text-gray-light font-medium mb-1">Sebuir Director Technical Product Management</p>
-              <p className="text-gray-light text-sm mb-4">GE Healthcare</p>
-              
-              <div className="space-y-3">
-                <div className="flex items-center justify-center space-x-2">
-                  <span className="text-gray-dark">📧</span>
-                  <a href="mailto:raghav.vanmali@ge.com" className="text-gray-light hover:text-gray-dark transition-colors text-sm">
-                    raghav.vanmali@ge.com
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Reference 2 - Supervisor Placeholder */}
-            <motion.div
-              className="rounded-2xl p-8 transition-all duration-300 text-center hover:bg-[#FEFCFC]"
-              style={{ backgroundColor: 'transparent' }}
-              variants={{
-                hidden: { opacity: 0, y: 30 },
-                visible: { opacity: 1, y: 0 }
-              }}
-            >
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <img src="/user.png" alt="User" className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-dark mb-2">Sanchayan Maity</h3>
-              <p className="text-gray-light font-medium mb-1">Global Analytics Leader</p>
-              <p className="text-gray-light text-sm mb-4">GE Vernova</p>
-              
-              <div className="space-y-3">
-                <div className="flex items-center justify-center space-x-2">
-                  <span className="text-gray-dark">📧</span>
-                  <a href="mailto:sanchayanmaity@gmail.com" className="text-gray-light hover:text-gray-dark transition-colors text-sm">
-                    sanchayanmaity@gmail.com
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Reference 3 - Supervisor Placeholder */}
-            <motion.div
-              className="rounded-2xl p-8 transition-all duration-300 text-center hover:bg-[#FEFCFC]"
-              style={{ backgroundColor: 'transparent' }}
-              variants={{
-                hidden: { opacity: 0, y: 30 },
-                visible: { opacity: 1, y: 0 }
-              }}
-            >
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <img src="/user.png" alt="User" className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-dark mb-2">Rojana Savoye</h3>
-              <p className="text-gray-light font-medium mb-1">Front House Director</p>
-              <p className="text-gray-light text-sm mb-4">Macky, University of Colorado Boulder</p>
-
-              <div className="space-y-3">
-                <div className="flex items-center justify-center space-x-2">
-                  <span className="text-gray-dark">📧</span>
-                  <a href="mailto:rojana.savoye@colorado.edu" className="text-gray-light hover:text-gray-dark transition-colors text-sm">
-                    rojana.savoye@colorado.edu
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Reference 4 - Juicy */}
-            <motion.div
-              className="rounded-2xl p-8 transition-all duration-300 text-center hover:bg-[#FEFCFC]"
-              style={{ backgroundColor: 'transparent' }}
-              variants={{
-                hidden: { opacity: 0, y: 30 },
-                visible: { opacity: 1, y: 0 }
-              }}
-            >
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <img src="/user.png" alt="User" className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-dark mb-2">Juicy</h3>
-              <p className="text-gray-light font-medium mb-1">Founder</p>
-              <p className="text-gray-light text-sm mb-4">Actualize</p>
-
-              <div className="space-y-3">
-                <div className="flex items-center justify-center space-x-2">
-                  <span className="text-gray-dark">📧</span>
-                  <a href="mailto:actualizeearthllc@gmail.com" className="text-gray-light hover:text-gray-dark transition-colors text-sm">
-                    actualizeearthllc@gmail.com
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-
-          </motion.div>
-
-          <motion.div
-            className="text-center mt-12"
+            className="hidden md:block"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: 0.7, delay: 0.15 }}
           >
-            <p className="text-gray-light text-lg">
-              References are available upon request. Please feel free to contact any of the above professionals for detailed insights about my work performance and contributions.
-            </p>
+            <img
+              src="/IMG_7121.PNG"
+              alt="Anudeep Nayak"
+              className="w-full max-w-[300px] ml-auto"
+              style={{
+                maskImage: 'linear-gradient(to bottom, #000 60%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, #000 60%, transparent 100%)',
+              }}
+            />
           </motion.div>
-        </div>
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="px-6 md:px-12 lg:px-20 xl:px-32 py-28 bg-gray-dark">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            className="flex items-center justify-center mb-6"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <img src="/cat_contact.png" alt="Contact" className="w-8 h-8 mr-3" />
-            <h2 className="text-3xl md:text-4xl font-bold text-off-white">Let's Work Together</h2>
-          </motion.div>
-          <motion.p
-            className="text-gray-light text-xl mb-6"
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            I'm actively seeking full-time opportunities to contribute to innovative teams and impactful projects.
-          </motion.p>
-          <motion.div
-            className="bg-off-white/10 rounded-2xl px-8 py-4 mb-12 inline-block"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <p className="text-off-white font-semibold text-lg">
-              ✅ Available to start immediately
-            </p>
-          </motion.div>
-
-          <motion.div
-            className="grid md:grid-cols-2 gap-12 mb-16"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={{
-              visible: {
-                transition: {
-                  staggerChildren: 0.1
-                }
-              }
-            }}
-          >
-            {/* Contact Info */}
-            <motion.div
-              className="space-y-8"
-              variants={{
-                hidden: { opacity: 0, x: -20 },
-                visible: { opacity: 1, x: 0 }
-              }}
-            >
-              <div className="flex items-center justify-center md:justify-start space-x-4">
-                <div className="w-12 h-12 bg-off-white rounded-full flex items-center justify-center">
-                  <img src="/Mail-logomark-noborder.png" alt="Email" className="w-6 h-6" />
-                </div>
-                <div className="text-left">
-                  <h3 className="text-off-white font-semibold">Email</h3>
-                  <a href="mailto:anudeep.nayak@protonmail.com" className="text-gray-light hover:text-off-white transition-colors">
-                    anudeep.nayak@protonmail.com
-                  </a>
+      {/* Experience */}
+      <Section
+        id="work-experience"
+        eyebrow="Experience"
+        title="Where I've worked"
+      >
+        <motion.div className="space-y-14" {...stagger}>
+          {workExperience.map((job) => (
+            <motion.article key={job.id} variants={item} className="grid md:grid-cols-[180px_1fr] gap-4 md:gap-10">
+              <div className="text-sm text-muted-2 md:pt-1">
+                <p className="font-mono text-[12px]">{job.duration}</p>
+                <p className="mt-1">{job.location}</p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-fg">{job.position}</h3>
+                <p className="text-accent text-[15px] mt-0.5">{job.company}</p>
+                {job.note && (
+                  <p className="text-muted-2 text-[13px] mt-2 italic">{job.note}</p>
+                )}
+                <ul className="mt-4 space-y-2.5">
+                  {job.responsibilities.map((r, i) => (
+                    <li key={i} className="flex gap-3.5 text-muted leading-relaxed">
+                      <span aria-hidden="true" className="bullet-dot" />
+                      <span>{r}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex flex-wrap gap-2 mt-5">
+                  {job.technologies.map((t) => (
+                    <span key={t} className="chip">{t}</span>
+                  ))}
                 </div>
               </div>
-              
-              <div className="flex items-center justify-center md:justify-start space-x-4">
-                <div className="w-12 h-12 bg-off-white rounded-full flex items-center justify-center">
-                  <img src="/phone.png" alt="Phone" className="w-6 h-6" />
+            </motion.article>
+          ))}
+        </motion.div>
+      </Section>
+
+      {/* Projects */}
+      <Section
+        id="projects"
+        eyebrow="Selected work"
+        title="Projects"
+        intro="Retrieval systems, graph analytics, and agents that verify their own output. Figures below come from my own measurements — where a number could not be sourced, there is no number."
+      >
+        <motion.div className="grid sm:grid-cols-2 gap-px bg-hair border border-hair rounded-2xl overflow-hidden" {...stagger}>
+          {projects.map((p) => {
+            /* Only some of these have a public repo; the rest render as plain cards. */
+            const Tag = p.href ? motion.a : motion.div;
+            const linkProps = p.href
+              ? { href: p.href, target: '_blank', rel: 'noopener noreferrer' }
+              : {};
+            return (
+              <Tag
+                key={p.id}
+                variants={item}
+                {...linkProps}
+                className={`bg-bg transition-colors duration-300 p-7 flex flex-col ${
+                  p.href ? 'group hover:bg-surface' : ''
+                }`}
+              >
+                <div className="flex items-baseline justify-between gap-4">
+                  <h3 className="text-lg font-semibold text-fg group-hover:text-accent transition-colors duration-200">
+                    {p.title}
+                  </h3>
+                  <span className="font-mono text-[11px] text-muted-2 shrink-0 text-right">
+                    {p.context}
+                  </span>
                 </div>
-                <div className="text-left">
-                  <h3 className="text-off-white font-semibold">Phone</h3>
-                  <a href="tel:+919945830497" className="text-gray-light hover:text-off-white transition-colors">
-                    +91 9945830497
-                  </a>
+                {p.subtitle && (
+                  <p className="text-[13px] text-accent mt-1">{p.subtitle}</p>
+                )}
+                <p className="text-muted text-[15px] leading-relaxed mt-3 flex-1">{p.blurb}</p>
+
+                {p.metrics.length > 0 && (
+                  <dl className="flex flex-wrap gap-x-8 gap-y-3 mt-5 pt-5 border-t border-hair">
+                    {p.metrics.map(([value, label]) => (
+                      <div key={label}>
+                        <dt className="sr-only">{label}</dt>
+                        <dd>
+                          <span className="block font-serif text-2xl leading-none text-fg">{value}</span>
+                          <span className="block text-[11px] text-muted-2 mt-1.5 max-w-[16ch] leading-snug">
+                            {label}
+                          </span>
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+
+                <div className="flex flex-wrap gap-2 mt-5">
+                  {p.tags.map((t) => (
+                    <span key={t} className="chip">{t}</span>
+                  ))}
                 </div>
+
+                {p.href && (
+                  <span className="text-[13px] text-accent mt-5 inline-flex items-center gap-1.5">
+                    {p.label}
+                    <span className="transition-transform duration-200 group-hover:translate-x-1">→</span>
+                  </span>
+                )}
+              </Tag>
+            );
+          })}
+        </motion.div>
+      </Section>
+
+      {/* Skills */}
+      <Section id="skills" eyebrow="Toolkit" title="Skills">
+        <motion.div className="space-y-9" {...stagger}>
+          {Object.entries(skills).map(([group, list]) => (
+            <motion.div key={group} variants={item} className="grid md:grid-cols-[180px_1fr] gap-3 md:gap-10">
+              <h3 className="text-sm font-medium text-muted-2 md:pt-1">{group}</h3>
+              <div className="flex flex-wrap gap-2">
+                {list.map((s) => (
+                  <span key={s} className="chip">{s}</span>
+                ))}
               </div>
             </motion.div>
+          ))}
+        </motion.div>
+      </Section>
 
-            {/* Social Links */}
-            <motion.div
-              className="space-y-8"
-              variants={{
-                hidden: { opacity: 0, x: 20 },
-                visible: { opacity: 1, x: 0 }
-              }}
-            >
-              <div className="flex items-center justify-center md:justify-start space-x-4">
-                <div className="w-12 h-12 bg-off-white rounded-full flex items-center justify-center">
-                  <img src="/linkedin.png" alt="LinkedIn" className="w-6 h-6" />
-                </div>
-                <div className="text-left">
-                  <h3 className="text-off-white font-semibold">LinkedIn</h3>
-                  <a href="https://linkedin.com/in/Anudeep-Nayak" target="_blank" rel="noopener noreferrer" className="text-gray-light hover:text-off-white transition-colors">
-                    linkedin.com/in/Anudeep-Nayak
-                  </a>
-                </div>
-              </div>
-              
-              <div className="flex items-center justify-center md:justify-start space-x-4">
-                <div className="w-12 h-12 bg-off-white rounded-full flex items-center justify-center">
-                  <svg className="w-6 h-6 text-gray-dark" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                  </svg>
-                </div>
-                <div className="text-left">
-                  <h3 className="text-off-white font-semibold">GitHub</h3>
-                  <a href="https://github.com/NayakAnudeep" target="_blank" rel="noopener noreferrer" className="text-gray-light hover:text-off-white transition-colors">
-                    github.com/NayakAnudeep
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* CTA Text */}
-          <motion.div
-            className="border-t border-gray-light/20 pt-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-          >
-            <p className="text-gray-light text-lg mb-6">
-              Have an opportunity that matches my skills? Let's discuss how I can contribute to your team.
-            </p>
-            <div className="text-gray-light text-xs space-y-1">
-              <p>Icons created by:</p>
-              <p><a href="https://www.flaticon.com/free-icons/black-cat" target="_blank" rel="noopener noreferrer" className="hover:text-off-white transition-colors">Yasashii std</a> • <a href="https://www.flaticon.com/authors/aomam" target="_blank" rel="noopener noreferrer" className="hover:text-off-white transition-colors">AomAm</a> • <a href="https://www.flaticon.com/authors/agustrisana" target="_blank" rel="noopener noreferrer" className="hover:text-off-white transition-colors">agustrisana</a> • <a href="https://www.flaticon.com/authors/freepik" target="_blank" rel="noopener noreferrer" className="hover:text-off-white transition-colors">Freepik</a> • <a href="https://www.flaticon.com/authors/madness" target="_blank" rel="noopener noreferrer" className="hover:text-off-white transition-colors">madness</a> • <a href="https://www.flaticon.com/authors/iconjam" target="_blank" rel="noopener noreferrer" className="hover:text-off-white transition-colors">Iconjam</a> • <a href="https://www.flaticon.com/authors/vectors-market" target="_blank" rel="noopener noreferrer" className="hover:text-off-white transition-colors">Vectors Market</a> • <a href="https://www.flaticon.com/authors/indra-maulana-yusuf" target="_blank" rel="noopener noreferrer" className="hover:text-off-white transition-colors">Indra Maulana Yusuf</a> - Flaticon</p>
+      {/* Education */}
+      <Section id="education" eyebrow="Education" title="Academic background">
+        <motion.div className="space-y-10" {...stagger}>
+          <motion.div variants={item} className="grid md:grid-cols-[180px_1fr] gap-3 md:gap-10">
+            <p className="font-mono text-[12px] text-muted-2 md:pt-1">Aug 2023 — May 2025</p>
+            <div>
+              <h3 className="text-xl font-semibold text-fg">MS, Data Science</h3>
+              <p className="text-accent text-[15px] mt-0.5">University of Colorado Boulder</p>
+              <p className="text-muted mt-2">GPA 3.93 · Machine learning, statistical analysis, AI systems</p>
             </div>
           </motion.div>
+          <motion.div variants={item} className="grid md:grid-cols-[180px_1fr] gap-3 md:gap-10">
+            <p className="font-mono text-[12px] text-muted-2 md:pt-1">Aug 2018 — Jun 2022</p>
+            <div>
+              <h3 className="text-xl font-semibold text-fg">B.Tech, Computer Science and Engineering</h3>
+              <p className="text-accent text-[15px] mt-0.5">Manipal Institute of Technology</p>
+              <p className="text-muted mt-2">Manipal, India · Algorithms, data structures, software engineering</p>
+            </div>
+          </motion.div>
+        </motion.div>
+      </Section>
+
+      <Section id="awards" eyebrow="Recognition" title="Awards">
+        {/* Awards */}
+        <motion.div {...fadeUp}>
+          <div className="grid sm:grid-cols-2 gap-8">
+            <div>
+              <h4 className="font-semibold text-fg">GE Renewables DT Hackathon — First Prize</h4>
+              <p className="text-muted text-[15px] mt-1">
+                Resume classification system reaching 83% accuracy with KNN and custom NLP.
+              </p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-fg">High Academic Performance</h4>
+              <p className="text-muted text-[15px] mt-1">MS Data Science, GPA 3.93 — CU Boulder.</p>
+            </div>
+          </div>
+        </motion.div>
+      </Section>
+
+      <Section id="certificates" eyebrow="Credentials" title="Certificates">
+        {/* Certificates */}
+        <motion.div {...fadeUp}>
+          <div className="grid sm:grid-cols-2 gap-x-10 gap-y-4">
+            {certificates.map((c) => (
+              <div key={c.name} className="flex justify-between gap-4 py-1">
+                <span className="text-[15px] text-fg">{c.name}</span>
+                <span className="text-[13px] text-muted-2 shrink-0">{c.issuer}</span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </Section>
+
+      <Section id="part-time" eyebrow="Alongside study" title="Part-time roles">
+        {/* Part-time */}
+        <motion.div {...fadeUp}>
+          <div className="space-y-7">
+            {partTime.map((r) => (
+              <div key={r.id} className="grid md:grid-cols-[180px_1fr] gap-2 md:gap-10">
+                <p className="font-mono text-[12px] text-muted-2 md:pt-1">{r.duration}</p>
+                <div>
+                  <h4 className="font-medium text-fg">
+                    {r.role} <span className="text-muted-2 font-normal">· {r.org}</span>
+                  </h4>
+                  <ul className="mt-2 space-y-1.5">
+                    {r.points.map((p, i) => (
+                      <li key={i} className="flex gap-3.5 text-muted text-[15px] leading-relaxed">
+                        <span aria-hidden="true" className="bullet-dot bullet-dot-sm" />
+                        <span>{p}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </Section>
+
+      {/* References */}
+      <Section
+        id="references"
+        eyebrow="Vouched for"
+        title="References"
+        intro="Managers and supervisors who have agreed to speak to my work. Contact details available on request."
+      >
+        <motion.div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10" {...stagger}>
+          {references.map((r) => (
+            <motion.div key={r.name} variants={item}>
+              <p className="eyebrow mb-2">{r.relation}</p>
+              <h3 className="text-[17px] font-semibold text-fg leading-snug">{r.name}</h3>
+              <p className="text-muted text-[15px] mt-1.5 leading-snug">{r.title}</p>
+              <p className="text-muted-2 text-[13px] mt-1.5">{r.org}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+      </Section>
+
+      {/* Contact */}
+      <section id="contact" className="px-6 md:px-12 lg:px-20 xl:px-32 pt-32 md:pt-40 pb-20 md:pb-24 overflow-hidden bg-fg">
+        <div className="max-w-5xl mx-auto">
+          <motion.div {...fadeUp}>
+            <div className="section-marker section-marker-dark mb-5">
+              <span className="eyebrow eyebrow-accent eyebrow-on-dark">Contact</span>
+            </div>
+            <h2 className="font-serif text-4xl md:text-5xl text-bg tracking-tight">
+              Let's work together
+            </h2>
+            <p className="text-muted-2 text-lg mt-4 max-w-xl leading-relaxed">
+              Open to full-time software engineering roles. The fastest way to reach me is email.
+            </p>
+          </motion.div>
+
+          <motion.div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-12 pt-12 border-t border-white/10" {...stagger}>
+            {[
+              ['Email', 'anudeep.nayak@protonmail.com', 'mailto:anudeep.nayak@protonmail.com'],
+              ['Phone', '+91 99458 30497', 'tel:+919945830497'],
+              ['LinkedIn', 'in/Anudeep-Nayak', 'https://linkedin.com/in/Anudeep-Nayak'],
+              ['GitHub', 'NayakAnudeep', 'https://github.com/NayakAnudeep'],
+            ].map(([label, value, href]) => (
+              <motion.div key={label} variants={item}>
+                <p className="eyebrow mb-2" style={{ color: 'var(--muted)' }}>{label}</p>
+                <a
+                  href={href}
+                  target={href.startsWith('http') ? '_blank' : undefined}
+                  rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  className="text-bg text-[15px] hover:text-accent transition-colors duration-200 break-words"
+                >
+                  {value}
+                </a>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.p className="text-muted text-[13px] mt-16 pt-8 border-t border-white/10" {...fadeUp}>
+            References available on request. © {new Date().getFullYear()} Anudeep Nayak.
+          </motion.p>
         </div>
       </section>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
