@@ -1,12 +1,36 @@
-# React + Vite
+# Anudeep Nayak · Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + Vite portfolio with an editorial layout, three illustrated case studies,
+an interactive fact-verification example, and expandable experience and project archives.
 
-Currently, two official plugins are available:
+## Development
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Use a working Node.js installation compatible with Vite 7 (Node 22.12+ recommended).
 
-## Expanding the ESLint configuration
+```sh
+npm ci
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```sh
+npm run build
+npm run lint
+```
+
+## Content and design
+
+- `src/content.js`: existing project, employment, and background evidence.
+- `src/App.jsx`: featured case studies, navigation, and illustrative diagrams.
+- `src/index.css`: shared palette, responsive layouts, focus and reduced-motion behavior.
+- `public/resume/anudeep_nayak.pdf`: downloadable résumé.
+
+Facts are sourced from the neighboring `resume_generator/LLM/reference/seed_anudeep.yaml`.
+Preserve measurement scope, attribution, and development status when editing copy.
+The project visuals illustrate architecture; the verifier example is a local UI demonstration,
+not a connection to the resume generator. It compares a supported 90% grading claim with
+an unsupported 99% rewrite using the AniTA measurement in the seed.
+
+The palette uses low-chroma warm paper surfaces, terracotta actions, and cool teal evidence
+panels. Tokens are expressed in OKLCH with equivalent hex fallbacks. Text colors are chosen
+for contrast on their actual surfaces. Native disclosures and buttons support keyboard
+navigation; motion respects the operating system’s reduced-motion preference.
